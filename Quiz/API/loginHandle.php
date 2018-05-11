@@ -9,10 +9,11 @@
 	//	Get param
 	$username = $requestData['username'];
 	$password = md5($requestData['password']);
-	$return['username']= $username;
-	$return['password']= $password;
+
 
 	if( $username == "" || $password == "" ){
+		$return['username']= $username;
+		$return['password']= $password;
 		$result['message'] = 'Require username and password!';
 		echo json_encode((object)$return);
 		http_response_code(404);
@@ -25,12 +26,14 @@
 
 	//	Query
 	$query = "SELECT * FROM `user` WHERE username = '".$username."' AND password = '".$password."';";
-	$return['query'] = $query;
+	// $return['query'] = $query;
 	$result = mysqli_query($connector, $query);
 
 	if( $result ){
 		if( mysqli_num_rows($result) == 1 ){
 			$_SESSION['user'] = $username;
+			$right = mysqli_fetch_array($result, MYSQLI_BOTH);
+			$_SESSION['role'] = $right['role'];
 			$return['message'] = 'success';
 			http_response_code(200);
 		}
