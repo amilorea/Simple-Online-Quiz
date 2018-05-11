@@ -11,20 +11,20 @@ function welcomeMaker(role, name){
 	document.getElementById('left-welcome').classList.add(roleClass);
 }
 function menuMaker(role){
-	var str = '<div class="mini menu-button" onclick="loadMain()">Trang chủ</div><hr>';
+	var str = '<div class="mini menu-button" onclick="loadMiddlePage(\'main.html\')">Trang chủ</div><hr>';
 	var role = parseInt(role);
 	if(role === _role.GUEST){
-		str += '<div class="mini menu-button" onclick="loadLogin()">Đăng nhập</div>';
-		str += '<div class="mini menu-button" onclick="loadRegister()">Đăng ký</div>';
+		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'login.html\')">Đăng nhập</div>';
+		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'register.html\')">Đăng ký</div>';
 	} else {
-		str += '<div class="mini menu-button" onclick="loadLogout()">Đăng xuất</div>';
-		str += '<div class="mini menu-button" onclick="loadProfile()">Cá nhân</div><hr>';
+		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'logout.html\')">Đăng xuất</div>';
+		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'profile.html\')">Cá nhân</div><hr>';
 		if(role >= _role.TEACHER){
-			str += '<div class="mini menu-button" onclick="loadExam()">Đề thi</div><hr>';
+			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam.html\')">Đề thi</div><hr>';
 		}
 		if(role >= _role.ADMIN){
-			str += '<div class="mini menu-button" onclick="loadAdmin()">Quản trị đề thi</div>';
-			str += '<div class="mini menu-button" onclick="loadExam()">Quản trị tài khoản</div>';
+			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'account-admin.html\')">Quản trị đề thi</div>';
+			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-admin.html\')">Quản trị tài khoản</div>';
 		}
 	}
 	console.log(str);
