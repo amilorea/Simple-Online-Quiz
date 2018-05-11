@@ -69,12 +69,15 @@
 				background-color: #efefef;
 				background-image: url('../img/noise.png');
 				padding: 5px;
+				text-align: center;
 			}
 			.right-frame {
 				width: 100%;
 			}
 		</style>
 		<script src="../script/left.js"></script>
+		<script src="../script/common.js"></script>
+		<script src="../script/account.js"></script>
 		<script type="text/javascript">
 			function loadTop(){
 				//Bắt đầu request
@@ -100,7 +103,7 @@
 						menuMaker(<?php echo $_SESSION['role'] ?>);
 					}
 				};
-				request.open('GET', 'left-panel.php');
+				request.open('GET', 'left-panel.html');
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
@@ -116,7 +119,7 @@
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
-			function loadMiddle(){
+			function loadMiddlePage(source){
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
@@ -124,7 +127,7 @@
 						document.getElementById('middle-frame').innerHTML = 'Lỗi không tải được dữ liệu';
 					else document.getElementById('middle-frame').innerHTML = this.responseText;
 				};
-				request.open('GET', 'middle-panel.html');
+				request.open('GET', source);
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
@@ -155,7 +158,7 @@
 			loadTop();
 			loadRight();
 			loadLeft();
-			loadMiddle();
+			loadMiddlePage('Main');
 		</script>
 	</body>
 </html>

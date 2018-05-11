@@ -1,0 +1,38 @@
+<style type="text/css">
+	.formLogin {
+		border: 5px double #000;
+		padding: 10px 30px 10px 30px;
+		margin: 5px;
+		background-color: #fafafa;
+		display: inline-block;
+		width: 500px;
+	}
+	.formContent {
+		text-align: left;
+		margin-left: 30px;
+		margin-right: 30px;
+	}
+	.formCaption {
+		display: inline-block;
+		width: 150px;
+	}
+	.formError {
+		font-weight: bold;
+		color: #f00;
+	}
+</style>
+<div style="display: inline-block; max-width: 500px">
+	<h1>Đăng ký</h1>
+	<div class="formContent">
+		<div class="formCaption required">New Username *: </div>	<input type="text" class="short-input round-input" id="username"><br>
+		<div class="formCaption required">New Lastname *: </div>	<input type="text" class="short-input round-input" id="lastname"><br>
+		<div class="formCaption required">New Password *: </div>	<input type="password" class="short-input round-input" id="password"><br>
+		<i>* Bắt buộc</i>
+	</div>
+	<hr>
+	<div id="notification"></div>
+	<hr>
+	<input class="medium-button loginButton" type="button" value="OK" name="ok" onclick="registerTrap()">
+	<input class="medium-button loginButton" type="button" value="Reset" name="reset" onclick="registerReset()">
+	<input class="medium-button loginButton" type="button" value="Exit" name="exit" onclick="registerExit()">
+</div>
