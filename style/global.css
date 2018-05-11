@@ -4,94 +4,44 @@ h1 {
 	font-size: 25px;
 	text-decoration: underline;
 }
-#notification {
-	font-weight: bold;
-	text-align: center;
-	font-size: 17px;
-	padding: 4px;
-}
-.role-0 > b {
-	color: #000;
-}
-.role-1 > b {
-	color: #00e;
-}
-.role-2 > b {
-	color: #0c0;
-}
-.role-3 > b {
-	color: #f00;
-}
 .error {
 	font-weight: bold;
 	color: red;
 	text-align: center;
 }
-.success {
-	color: #0a0;
-}
-.warning {
-	color: #00a;
-}
 .hide {
 	display: none;
 }
-.blur {
-	opacity : 0;
-	-moz-opacity : 0;
-	-ms-opacity : 0;
-	-o-opacity : 0;
-	filter : alpha(opacity=0);
-}
-.table-name {
-	text-align: center;
-	font-weight: bold;
-	font-size: 22px;
-	text-decoration: underline;
-}
-.table-result caption {
+.tableResult caption {
 	font-weight: bold;
 	font-size: 20px;
 }
-.table-result {
+.tableResult {
 	table-layout: fixed;
 	border-collapse: collapse;
 	width: 100%;
-	background-color: #fafafa;
-	border: 1px solid gray;
-	box-shadow: 0px 0px 1px 1px grey;
+   background-color: #fafafa;
 }
-.table-result td {
+.tableResult td {
 	border-collapse: collapse;
 	word-wrap: break-word;
 	padding: 1px 4px 1px 4px;
-	
-	transition: all 0.3s ease;
-	-webkit-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
 }
-.table-result tr:nth-child(2n + 1) {
-	background-color: #ebebeb;
-}
-.table-result tr:first-child {
-	background-color: #ff8;
-	text-align: center;
-	font-weight: bold;
-}
-.table-result tr:first-child:hover {
+.tableResult tr:first-child {
 	background-color: #ff8;
 }
-.table-result tr:hover {
-	background-color: #ccf;
+.tableResult tr:first-child:hover {
+	background-color: #ff8;
+}
+.tableResult tr:hover {
+	background-color: #ddf;
 }
 .visbleRow {
 }
 .hiddenRow {
 	display: none!important;
 }
-.table-result caption {
+.tableResult caption {
 	font-weight: bold;
 	font-size: 20px;
 }
@@ -99,12 +49,6 @@ h1 {
 	font-weight: bold;
 	font-size: 16px;
 	text-align: center;
-}
-input {
-	width: 100%;
-}
-.shortInput {
-	width: 50%;
 }
 button {
 	font-weight: bold;
@@ -126,6 +70,22 @@ button:disabled {
 	border-radius: 0px;
 	margin: 3px 4px 3px 4px;
 }
+/* Input */
+.required{
+    color: #ee9500;
+	font-weight: bold;
+}
+.short-input {
+	
+}
+.round-input {
+	border-radius: 3px;
+}
+
+/* Button */
+.loginButton {
+	background-color: #eee;
+}
 .insertButton {
 	background-color: #ff9;
 }
@@ -138,20 +98,22 @@ button:disabled {
 .removeButton {
 	background-color: #f99;
 }
-.removeAllButton {
-	color: #fff;
-	background-color: #f00;
-	width: 200px;
-}
 .cancelButton {
 	background-color: #99f;
 	display: none;
 }
 .backButton {
-	width: 200px;
+	width: 100px;
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
-.largeButton {
-	width: 200px;
+.small-button {
+	width: 50px;
+}
+.medium-button {
+	width: 150px;
+	border-radius: 5px;
+}
+.large-button {
+	width: 450px;
 }
