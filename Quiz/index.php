@@ -80,6 +80,20 @@
 		<script src="../script/account.js"></script>
 		<script src="../script/profile.js"></script>
 		<script type="text/javascript">
+			var _ROLE = Object.freeze({
+				'GUEST' : 0,
+				'USER' : 1,
+				'TEACHER' : 2,
+				'ADMIN' : 3
+			});
+			var _role, _name;
+			function updateSession(){
+				_role = <?php echo $_SESSION['role'] ?>;
+				_name = '<?php echo $_SESSION['name'] ?>';
+				
+				_role = 3;
+				_name = 'Mock name';
+			}
 			function loadTop(){
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
@@ -100,8 +114,8 @@
 						document.getElementById('left-frame').innerHTML = 'Lỗi không tải được dữ liệu';
 					else {
 						document.getElementById('left-frame').innerHTML = this.responseText;
-						welcomeMaker(<?php echo $_SESSION['role'] ?>, '<?php echo $_SESSION['name'] ?>');
-						menuMaker(3/*<?php echo $_SESSION['role'] ?>*/);
+						welcomeMaker(_role, _name);
+						menuMaker(_role);
 					}
 				};
 				request.open('GET', 'left-panel.html');
@@ -156,6 +170,7 @@
 			</table>
 		</div>
 		<script type="text/javascript">
+			updateSession();
 			loadTop();
 			loadRight();
 			loadLeft();

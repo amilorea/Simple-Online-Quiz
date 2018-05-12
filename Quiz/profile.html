@@ -9,6 +9,14 @@
 		font-weight: bold;
 		margin-bottom: 3px;
 	}
+	.profile-field-center {
+		color: orange;
+		font-size: 20px;
+		text-align: center;
+		font-weight: bold;
+		text-decoration: underline;
+		margin: 5px;
+	}
 	.profile-value {
 		display: inline-block;
 	}
@@ -17,27 +25,42 @@
 	}
 </style>
 <div class="profile" onload="loadProfile()">
-	<h1>Xin chào <span class="profile-name"></span></h1>
+	<h1>Xin chào <span id="accountnameWelcome"></span></h1>
 	<hr>
 	<div id="notification"></div>
 	<div style="padding: 0px 15px">
-		<div class="profile-field">Tên tài khoản: </div>
-		<div class="profile-value" id="accountname"></div>
-		<input type="text" class="short-input round-input hide" id="accountnameForm" disabled><br>
-		
 		<div class="profile-field">Tên đăng nhập: </div>
 		<div class="profile-value" id="username"></div>
-		<input type="text" class="short-input round-input hide" id="usernameForm" disabled><br>
+		<input type="text" class="medium-input round-input hide" id="usernameForm" disabled><br>
+		
+		<div class="profile-field">Tên tài khoản: </div>
+		<div class="profile-value" id="accountname"></div>
+		<input type="text" class="medium-input round-input hide" id="accountnameForm" disabled><br>
 		
 		<div class="profile-field">Mật khẩu: </div>
 		<div class="profile-value" id="password"></div>
-		<input type="text" class="short-input round-input hide" id="passwordForm" disabled><br>
+		<input type="text" class="medium-input round-input hide" id="passwordForm" disabled><br>
 		<div style="text-align: center">
 			<button type="button" class="medium-button editButton" onclick="profileEdit()" id="buttonEdit">Sửa</button>
 			<button type="button" class="medium-button cancelButton hide" onclick="profileCancel()" id="buttonCancel" disabled>Hủy</button>
 		</div>
-		<div class="profile-field">Lịch sử thi: </div>
-		<div id="exam"></div>
+		<div class="profile-field-center">Lịch sử thi</div>
+		<div id="exam">
+			<table class="tableExam">
+				<tr id="metaRow">
+					<td class="idCol"><b>ID kỳ thi</b></td>
+					<td class="nameCol"><b>Tên kỳ thi</b></td>
+					<td class="teacherCol"><b>Giáo viên</b></td>
+					<td class="pointCol"><b>Điểm</b></td>
+				</tr>
+				<tr id="prototype" class="hide">
+					<td class="idCol"></td>
+					<td class="nameCol"></td>
+					<td class="teacherCol"></td>
+					<td class="pointCol"></td>
+				</tr>
+			</table>
+		</div>
 		<hr>
 	</div>
 </div>
