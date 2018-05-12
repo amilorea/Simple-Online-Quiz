@@ -100,7 +100,9 @@ button:disabled {
 }
 .cancelButton {
 	background-color: #99f;
-	display: none;
+}
+.saveButton {
+	background-color: orange;
 }
 .backButton {
 	width: 100px;
