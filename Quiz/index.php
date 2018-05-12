@@ -78,6 +78,7 @@
 		<script src="../script/left.js"></script>
 		<script src="../script/common.js"></script>
 		<script src="../script/account.js"></script>
+		<script src="../script/profile.js"></script>
 		<script type="text/javascript">
 			function loadTop(){
 				//Bắt đầu request
@@ -100,7 +101,7 @@
 					else {
 						document.getElementById('left-frame').innerHTML = this.responseText;
 						welcomeMaker(<?php echo $_SESSION['role'] ?>, '<?php echo $_SESSION['name'] ?>');
-						menuMaker(<?php echo $_SESSION['role'] ?>);
+						menuMaker(3/*<?php echo $_SESSION['role'] ?>*/);
 					}
 				};
 				request.open('GET', 'left-panel.html');
@@ -158,7 +159,7 @@
 			loadTop();
 			loadRight();
 			loadLeft();
-			loadMiddlePage('Main');
+			loadMiddlePage('main.html');
 		</script>
 	</body>
 </html>
