@@ -1,17 +1,15 @@
 function profileEdit(){
-	console.log('a');
-	var username = document.getElementById('usernameForm');
 	var password = document.getElementById('passwordForm');
 	var accountname = document.getElementById('accountnameForm');
-	
-	username.removeAttribute('disabled');
-	username.classList.remove('hide');
 	
 	password.removeAttribute('disabled');
 	password.classList.remove('hide');
 	
 	accountname.removeAttribute('disabled');
 	accountname.classList.remove('hide');
+	
+	document.getElementById('password').classList.add('hide');
+	document.getElementById('accountname').classList.add('hide');
 	
 	var editButton = document.getElementById('buttonEdit');
 	editButton.classList.remove('editButton');
@@ -24,18 +22,17 @@ function profileEdit(){
 	cancelButton.removeAttribute('disabled');
 }
 function profileCancel(){
-	var username = document.getElementById('usernameForm');
 	var password = document.getElementById('passwordForm');
 	var accountname = document.getElementById('accountnameForm');
-	
-	username.setAttribute('disabled', '');
-	username.classList.add('hide');
 	
 	password.setAttribute('disabled', '');
 	password.classList.add('hide');
 	
 	accountname.setAttribute('disabled', '');
 	accountname.classList.add('hide');
+	
+	document.getElementById('password').classList.remove('hide');
+	document.getElementById('accountname').classList.remove('hide');
 	
 	var editButton = document.getElementById('buttonEdit');
 	editButton.classList.add('editButton');
@@ -48,38 +45,106 @@ function profileCancel(){
 	cancelButton.setAttribute('disabled', '');
 }
 function profileSave(){
-	var username = document.getElementById('username');
-	var password = document.getElementById('password');
-	var accountname = document.getElementById('accountname');
-	
 	var paramObject = {};
-	paramObject['username'] = username;
-	paramObject['password'] = password;
+	paramObject['password'] = document.getElementById('passwordForm').value.trim();
+	paramObject['accountname'] = document.getElementById('accountnameForm').value.trim();
 	var param = JSON.stringify(paramObject);
 	logParam(param);
 	
 	//Bắt đầu request
+	profileCancel();
+	buttonOnload(document.getElementById('buttonEdit'));
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
+			buttonUnload(document.getElementById('Lưu'));
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
-				window.location.href = 'viewDatabase.php';
+				if(returnObject['accountname'] !== undefined){
+					document.getElementById('accountname').innerHTML = returnObject['accountname'];
+					document.getElementById('accountnameWelcome').innerHTML = returnObject['accountname'];
+					var roleClass = 'role-' + _role;
+					document.getElementById('accountnameWelcome').classList.add(roleClass);
+				}
+				if(returnObject['password'] !== undefined){
+					document.getElementById('password').innerHTML = returnObject['password'];
+				}
 				break;
 			case 400:
+				notification(returnObject['message'], 'error');
+				break;
 			case 401:
 				notification(returnObject['message'], 'error');
-				var register = document.getElementById('register');
-				register.classList.remove('hide');
-				register.removeAttribute('disabled');
+				loadMiddlePage('login.html');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
 				break;
 			}
 		}
 	};
-	request.open('POST', API + 'loginHandle.php');
+	request.open('POST', API + 'profileHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
+}
+function loadProfile(){
+	updateSession();
+	var username = document.getElementById('username');
+	var password = document.getElementById('password');
+	var accountname = document.getElementById('accountname');
+	
+	//Bắt đầu request
+	buttonOnload(username);
+	buttonOnload(password);
+	buttonOnload(accountname);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			buttonUnload(username);
+			buttonUnload(password);
+			buttonUnload(accountname);
+			switch(this.status){
+			case 200:
+				//notification(returnObject['message'], 'success');
+				username.innerHTML = returnObject['username'];
+				
+				accountname.innerHTML = returnObject['accountname'];
+				document.getElementById('accountnameWelcome').innerHTML = returnObject['accountname'];
+				var roleClass = 'role-' + returnObject['role'];
+				document.getElementById('accountnameWelcome').classList.add(roleClass);
+
+				password.innerHTML = '**********';
+				
+				var examData = returnObject['exam'];
+				if(examData !== undefined){
+					var prototypeRow = document.getElementById('prototype');
+					for(let data of examData){
+						var newRow = prototypeRow.cloneNode(true);
+						newRow.getElementsByClassName('idCol')[0].innerHTML = data[id];
+						newRow.getElementsByClassName('nameCol')[0].innerHTML = data[name];
+						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data[teacher];
+						newRow.getElementsByClassName('pointCol')[0].innerHTML = data[point];
+						prototypeRow.after(newRow);
+					}
+				}
+				break;
+			case 400:
+				notification(returnObject['message'], 'error');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			}
+		}
+	};
+	request.open('GET', API + 'profileHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
