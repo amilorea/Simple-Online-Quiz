@@ -6,46 +6,51 @@
 	//	Make object return
 	$return = [];
 
-	//	Get param
-	$username = $requestData['username'];
-	$password = md5($requestData['password']);
+	try {
+		//	Get param
+		$username = $requestData['username'];
+		$password = md5($requestData['password']);
 
 
-	if( $username == "" || $password == "" ){
-		$return['username']= $username;
-		$return['password']= $password;
-		$result['message'] = 'Require username and password!';
-		echo json_encode((object)$return);
-		http_response_code(404);
-	}
+		if( $username == "" || $password == "" ){
+			$return['username']= $username;
+			$return['password']= $password;
+			$result['message'] = 'Require username and password!';
+			echo json_encode((object)$return);
+			http_response_code(404);
+		}
 
-	//	Connect
-	$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
-	mysqli_set_charset($connector, 'utf8');
-	$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+		//	Connect
+		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
+		mysqli_set_charset($connector, 'utf8');
+		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
-	//	Query
-	$query = "SELECT * FROM `user` WHERE username = '".$username."' AND password = '".$password."';";
-	// $return['query'] = $query;
-	$result = mysqli_query($connector, $query);
+		//	Query
+		$query = "SELECT * FROM `user` WHERE username = '".$username."' AND password = '".$password."';";
+		// $return['query'] = $query;
+		$result = mysqli_query($connector, $query);
 
-	if( $result ){
-		if( mysqli_num_rows($result) == 1 ){
-			$_SESSION['user'] = $username;
-			$right = mysqli_fetch_array($result, MYSQLI_BOTH);
-			$_SESSION['role'] = $right['role'];
-			$return['message'] = 'success';
-			http_response_code(200);
+		if( $result ){
+			if( mysqli_num_rows($result) == 1 ){
+				$_SESSION['user'] = $username;
+				$right = mysqli_fetch_array($result, MYSQLI_BOTH);
+				$_SESSION['role'] = $right['role'];
+				$return['message'] = 'success';
+				http_response_code(200);
+			}
+			else {
+				$return['message'] = 'Invalid username or password!';
+				http_response_code(400);
+			}
+			mysqli_free_result($result);
 		}
 		else {
-			$return['message'] = 'Invalid username or password!';
-			http_response_code(400);
+			$return['message'] = 'Login error!!!';
+			http_response_code(500);
 		}
-		mysqli_free_result($result);
+		echo json_encode((object)$return);
+	} catch ( Exception e ) {
+		echo json_encode((object)$return);
+		http_response_code(400);
 	}
-	else {
-		$return['message'] = 'Login error!!!';
-		http_response_code(500);
-	}
-	echo json_encode((object)$return);
 ?>

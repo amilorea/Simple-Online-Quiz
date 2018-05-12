@@ -12,7 +12,6 @@
 	$password = md5($requestData['password']);
 
 	try {
-		// $return['space'] = strrpos($username," ");
 		if( !( strrpos($username," ") === false ) ){
 			$return['username'] = $username;
 			$return['message'] = 'Username can\'t have space';
@@ -45,12 +44,12 @@
 				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'Invalid username or password!';
+				$return['message'] = 'Duplicate username!';
 				http_response_code(400);
 			}
 		}
 		else {
-			$return['message'] = 'Login error!!!';
+			$return['message'] = 'Register error!!!';
 			http_response_code(500);
 		}
 		echo json_encode((object)$return);
