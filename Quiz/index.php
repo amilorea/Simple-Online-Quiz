@@ -1,6 +1,5 @@
 <?php
 	session_start();
-	session_unset(); 
 	if(!isset($_SESSION['role'])){
 		$_SESSION['role'] = 0;
 	}
