@@ -1,12 +1,12 @@
 function getAllExam(mode){
 	//Bắt đầu request
-	buttonOnload(_notification, 30);
+	onload(document.getElementById('notification'), 30);
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			buttonUnload(_notification);
+			unload(document.getElementById('notification'));
 			switch(this.status){
 			case 200:
 				if(mode === 'simple'){
@@ -56,13 +56,13 @@ function getExam(id){
 	logParam(param);
 	
 	//Bắt đầu request
-	buttonOnload(_notification, 30);
+	onload(document.getElementById('notification'), 30);
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			buttonUnload(_notification);
+			unload(document.getElementById('notification'));
 			switch(this.status){
 			case 200:
 				document.getElementById('introduction') = '<div class="exam-name">' + returnObject['name'] + '</div>--<div class="exam-author">' + returnObject['teacher'] + '</div>--';

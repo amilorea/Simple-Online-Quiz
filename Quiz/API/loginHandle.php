@@ -33,8 +33,9 @@
 		if( $result ){
 			if( mysqli_num_rows($result) == 1 ){
 				$right = mysqli_fetch_array($result, MYSQLI_BOTH);
-				$_SESSION['name'] = $username;
-				$_SESSION['role'] = $right['role'];
+				$_SESSION['user'] = $username;
+				$_SESSION['account'] = $right['accountname'];
+				$_SESSION['role'] = (int)$right['role'];
 				$return['accountname'] = $right['accountname'];
 				$return['username'] = $right['username'];
 				$return['role'] = $right['role'];

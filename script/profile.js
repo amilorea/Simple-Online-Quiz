@@ -53,13 +53,13 @@ function profileSave(){
 	
 	//Bắt đầu request
 	profileCancel();
-	buttonOnload(document.getElementById('buttonEdit'));
+	onload(document.getElementById('buttonEdit'));
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			buttonUnload(document.getElementById('Lưu'));
+			unload(document.getElementById('Lưu'));
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
@@ -92,30 +92,29 @@ function profileSave(){
 	request.send(param);
 }
 function loadProfile(){
-	updateSession();
 	var username = document.getElementById('username');
 	var password = document.getElementById('password');
 	var accountname = document.getElementById('accountname');
 	
 	//Bắt đầu request
-	buttonOnload(username);
-	buttonOnload(password);
-	buttonOnload(accountname);
+	onload(username);
+	onload(password);
+	onload(accountname);
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			buttonUnload(username);
-			buttonUnload(password);
-			buttonUnload(accountname);
+			unload(username);
+			unload(password);
+			unload(accountname);
 			switch(this.status){
 			case 200:
 				//notification(returnObject['message'], 'success');
 				username.innerHTML = returnObject['username'];
 				
 				accountname.innerHTML = returnObject['accountname'];
-				document.getElementById('accountnameWelcome').innerHTML = returnObject['accountname'];
+				document.getElementById('accountnameWelcome').innerHTML = '<b>' + returnObject['accountname'] + '</b>';
 				var roleClass = 'role-' + returnObject['role'];
 				document.getElementById('accountnameWelcome').classList.add(roleClass);
 
@@ -135,5 +134,5 @@ function loadProfile(){
 	};
 	request.open('GET', API + 'profileHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
-	request.send(param);
+	request.send();
 }

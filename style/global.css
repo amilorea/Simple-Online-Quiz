@@ -2,13 +2,15 @@ h1 {
 	font-weight: bold;
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 25px;
-	text-decoration: underline;
 }
 #notification {
 	font-weight: bold;
 	text-align: center;
 	font-size: 17px;
 	padding: 4px;
+}
+.left {
+	text-align: left!important;
 }
 .role-0 > b {
 	color: #000;

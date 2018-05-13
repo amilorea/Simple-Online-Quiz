@@ -4,8 +4,8 @@
 		$_SESSION['role'] = 0;
 	}
 	
-	if(!isset($_SESSION['name'])){
-		$_SESSION['name'] = 'Khách viếng thăm';
+	if(!isset($_SESSION['account'])){
+		$_SESSION['account'] = 'Khách viếng thăm';
 	}
 ?>
 <!DOCTYPE html>
@@ -91,36 +91,45 @@
 			});
 			var _role, _name;
 			var _middleWidth;
-			var _notification = document.getElementById('notification');
-			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['name'] ?>'){
+			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['account'] ?>'){
 				_role = role;
 				_name = name;
-				
-				_middleWidth = document.getElementById('middle-frame').clientWidth;
 			}
-			updateSession(3, 'mock');
+			//updateSession(3, 'mock');
 			function loadTop(){
+				var target = document.getElementById('top-frame');
+				
+				onload(target, 50);
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
-					if(this.responseText.length === 0)
-						document.getElementById('top-frame').innerHTML = 'Lỗi không tải được dữ liệu';
-					else document.getElementById('top-frame').innerHTML = this.responseText;
+					if (this.readyState == 4) {
+						unload(target, 50);
+						if(this.responseText.length === 0)
+							target.innerHTML = 'Lỗi không tải được dữ liệu';
+						else target.innerHTML = this.responseText;
+					}
 				};
 				request.open('GET', 'top-panel.html');
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
 			function loadLeft(){
+				var target = document.getElementById('left-frame');
+				
+				onload(target, 50);
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
-					if(this.responseText.length === 0)
-						document.getElementById('left-frame').innerHTML = 'Lỗi không tải được dữ liệu';
-					else {
-						document.getElementById('left-frame').innerHTML = this.responseText;
-						welcomeMaker(_role, _name);
-						menuMaker(_role);
+					if (this.readyState == 4) {
+						unload(target, 50);
+						if(this.responseText.length === 0)
+							target.innerHTML = 'Lỗi không tải được dữ liệu';
+						else {
+							target.innerHTML = this.responseText;
+							welcomeMaker(_role, _name);
+							menuMaker(_role);
+						}
 					}
 				};
 				request.open('GET', 'left-panel.html');
@@ -128,26 +137,38 @@
 				request.send();
 			}
 			function loadRight(){
+				var target = document.getElementById('right-frame');
+				
+				onload(target, 50);
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
-					if(this.responseText.length === 0)
-						document.getElementById('right-frame').innerHTML = 'Lỗi không tải được dữ liệu';
-					else document.getElementById('right-frame').innerHTML = this.responseText;
+					if (this.readyState == 4) {
+						unload(target, 50);
+						if(this.responseText.length === 0)
+							target.innerHTML = 'Lỗi không tải được dữ liệu';
+						else target.innerHTML = this.responseText;
+					}
 				};
 				request.open('GET', 'right-panel.html');
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
 			function loadMiddlePage(source, callback = function(){}){
+				var target = document.getElementById('middle-frame');
+				
+				onload(target, 50);
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
-					if(this.responseText.length === 0)
-						document.getElementById('middle-frame').innerHTML = 'Lỗi không tải được dữ liệu';
-					else {
-						document.getElementById('middle-frame').innerHTML = this.responseText;
-						callback();
+					if (this.readyState == 4) {
+						unload(target, 50);
+						if(this.responseText.length === 0)
+							target.innerHTML = 'Lỗi không tải được dữ liệu';
+						else {
+							target.innerHTML = this.responseText;
+							callback();
+						}
 					}
 				};
 				request.open('GET', source);

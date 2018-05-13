@@ -7,12 +7,14 @@
 	$return = [];
 
 	//	Destroy session
-	if( isset($_SESSION['name']) && session_unset() && session_destroy() ) {
+	if( isset($_SESSION['user']) && isset($_SESSION['role']) && (int)$_SESSION['role'] > 0 ) {
+		session_unset();
+		session_destroy();
 		$return['message'] = 'success';
 		http_response_code(200);
 	}
 	else {
-		$return['message'] = 'failed!';
+		$return['message'] = 'failed';
 		http_response_code(401);
 	}
 	echo json_encode((object)$return);
