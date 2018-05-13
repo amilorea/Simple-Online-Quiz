@@ -92,15 +92,13 @@
 			var _role, _name;
 			var _middleWidth;
 			var _notification = document.getElementById('notification');
-			function updateSession(){
-				_role = <?php echo $_SESSION['role'] ?>;
-				_name = '<?php echo $_SESSION['name'] ?>';
-				
-				_role = 3;
-				_name = 'Mock name';
+			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['name'] ?>'){
+				_role = role;
+				_name = name;
 				
 				_middleWidth = document.getElementById('middle-frame').clientWidth;
 			}
+			updateSession(3, 'mock');
 			function loadTop(){
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
