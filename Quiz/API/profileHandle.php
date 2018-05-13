@@ -20,7 +20,7 @@
 				$result['message'] = 'Require username!';
 				echo json_encode((object)$return);
 				http_response_code(404);
-				throw new Exception($return['mesage'])
+				throw new Exception($return['mesage']);
 			}
 
 			//	Connect
@@ -45,7 +45,7 @@
 			addQuery('password', $password);
 			addQuery('role', $role);
 
-			$query= $query." WHERE username = '".$username."';"
+			$query= $query." WHERE username = '".$username."';";
 
 			$return['query'] = $query;
 			$result = mysqli_query($connector, $query);
@@ -66,7 +66,7 @@
 				http_response_code(500);
 			}
 			echo json_encode((object)$return);
-		} catch( Exception e ) {
+		} catch( Exception $error ) {
 			echo json_encode((object)$return);
 			http_response_code(400);
 		}
@@ -75,13 +75,14 @@
 		try {
 			//	Get param
 			$username = $requestData['username'];
+			$username = $_SESSION['user'];
 
 			if( $username == "" ){
 				$return['username']= $username;
-				$result['message'] = 'Require username!';
-				echo json_encode((object)$return);
+				$return['message'] = 'Require username!';
+				// echo json_encode((object)$return);
 				http_response_code(404);
-				throw new Exception($return['mesage'])
+				throw new Exception($return['message']);
 			}
 
 			//	Connect
@@ -90,18 +91,17 @@
 			$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 			//	Query
-			$query = "SELECT * FROM `user` INNER JOIN `role` ON user.role = role.id WHERE username = '".$username."';";
+			$query = "SELECT * FROM `user` WHERE username = '".$username."';";
 			// $return['query'] = $query;
 			$result = mysqli_query($connector, $query);
 
 			if( $result ){
 				if( isset($_SESSION['user']) && mysqli_num_rows($result) == 1 ){
-					$userinfo = []
-					$userinfo['accountname'] = $result['accountname'];
-					$userinfo['username'] = $result['username'];
-					$userinfo['password'] = $result['password'];
-					$userinfo['role'] = $result['rolename'];
-					$return['user'] = (object)$userinfo;
+					$right = mysqli_fetch_array($result, MYSQLI_BOTH);
+					$return['accountname'] = $right['accountname'];
+					$return['username'] = $right['username'];
+					// $return['password'] = $right['password'];
+					$return['role'] = $right['role'];
 					$return['message'] = 'success';
 					http_response_code(200);
 				}
@@ -116,7 +116,7 @@
 				http_response_code(500);
 			}
 			echo json_encode((object)$return);
-		} catch( Exception e ) {
+		} catch( Exception $error ) {
 			echo json_encode((object)$return);
 			http_response_code(400);
 		}
