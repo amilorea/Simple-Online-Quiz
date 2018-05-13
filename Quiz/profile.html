@@ -23,8 +23,23 @@
 	.profile-box {
 		display: inline-block;
 	}
+	.idCol {
+		width: 15%;
+		text-align: center;
+	}
+	.nameCol {
+		width: 55%;
+		text-align: left;
+	}
+	.teacherCol {
+		width: 20%;
+		text-align: left;
+	}
+	.pointCol {
+		text-align: center;
+	}
 </style>
-<div class="profile" onload="loadProfile()">
+<div class="profile">
 	<h1>Xin chào <span id="accountnameWelcome"></span></h1>
 	<hr>
 	<div id="notification"></div>
@@ -48,10 +63,10 @@
 		<div id="exam">
 			<table class="tableExam">
 				<tr id="metaRow">
-					<td class="idCol"><b>ID kỳ thi</b></td>
-					<td class="nameCol"><b>Tên kỳ thi</b></td>
-					<td class="teacherCol"><b>Giáo viên</b></td>
-					<td class="pointCol"><b>Điểm</b></td>
+					<td class="idCol">ID kỳ thi</td>
+					<td class="nameCol">Tên kỳ thi</td>
+					<td class="teacherCol">Giáo viên</td>
+					<td class="pointCol">Điểm</td>
 				</tr>
 				<tr id="prototype" class="hide">
 					<td class="idCol"></td>

@@ -19,6 +19,7 @@
 		<style type="text/css">
 			body {
 				background-image: url('../img/cork-wallet.png');
+				min-width: 800px;
 			}
 			div {
 				border-width: 0;
@@ -59,7 +60,8 @@
 				width: 100%;
 			}
 			.left-frame {
-				width: 100%;
+				width: 200px;
+				position: fixed;
 			}
 			.middle-frame {
 				min-height: 500px;
@@ -72,13 +74,15 @@
 				text-align: center;
 			}
 			.right-frame {
-				width: 100%;
+				width: 150px;
+				position: fixed;
 			}
 		</style>
 		<script src="../script/left.js"></script>
 		<script src="../script/common.js"></script>
 		<script src="../script/account.js"></script>
 		<script src="../script/profile.js"></script>
+		<script src="../script/exam.js"></script>
 		<script type="text/javascript">
 			var _ROLE = Object.freeze({
 				'GUEST' : 0,
@@ -87,12 +91,16 @@
 				'ADMIN' : 3
 			});
 			var _role, _name;
+			var _middleWidth;
+			var _notification = document.getElementById('notification');
 			function updateSession(){
 				_role = <?php echo $_SESSION['role'] ?>;
 				_name = '<?php echo $_SESSION['name'] ?>';
 				
 				_role = 3;
 				_name = 'Mock name';
+				
+				_middleWidth = document.getElementById('middle-frame').clientWidth;
 			}
 			function loadTop(){
 				//Bắt đầu request
@@ -134,13 +142,16 @@
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
-			function loadMiddlePage(source){
+			function loadMiddlePage(source, callback = function(){}){
 				//Bắt đầu request
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
 					if(this.responseText.length === 0)
 						document.getElementById('middle-frame').innerHTML = 'Lỗi không tải được dữ liệu';
-					else document.getElementById('middle-frame').innerHTML = this.responseText;
+					else {
+						document.getElementById('middle-frame').innerHTML = this.responseText;
+						callback();
+					}
 				};
 				request.open('GET', source);
 				request.setRequestHeader('Content-type', 'text/plain');
