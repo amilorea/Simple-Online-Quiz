@@ -7,7 +7,7 @@
 	$return = [];
 
 	//	Destroy session
-	if( isset($_SESSION['user']) && session_unset() && session_destroy() ) {
+	if( isset($_SESSION['name']) && session_unset() && session_destroy() ) {
 		$return['message'] = 'success';
 		http_response_code(200);
 	}
