@@ -121,18 +121,7 @@ function loadProfile(){
 
 				password.innerHTML = '**********';
 				
-				var examData = returnObject['exam'];
-				if(examData !== undefined){
-					var prototypeRow = document.getElementById('prototype');
-					for(let data of examData){
-						var newRow = prototypeRow.cloneNode(true);
-						newRow.getElementsByClassName('idCol')[0].innerHTML = data[id];
-						newRow.getElementsByClassName('nameCol')[0].innerHTML = data[name];
-						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data[teacher];
-						newRow.getElementsByClassName('pointCol')[0].innerHTML = data[point];
-						prototypeRow.after(newRow);
-					}
-				}
+				getAllExam('simple');
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');

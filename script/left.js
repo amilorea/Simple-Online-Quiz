@@ -12,15 +12,14 @@ function menuMaker(role){
 		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'register.html\')">Đăng ký</div>';
 	} else {
 		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'logout.html\')">Đăng xuất</div>';
-		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'profile.html\')">Cá nhân</div><hr>';
+		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'profile.html\'), function(){ return loadProfile()">Cá nhân</div><hr>';
 		if(role >= _ROLE.TEACHER){
-			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam.html\')">Đề thi</div><hr>';
+			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-list.html\'), function(){ return getAllExam() }">Đề thi</div><hr>';
 		}
 		if(role >= _ROLE.ADMIN){
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'account-admin.html\')">Quản trị đề thi</div>';
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-admin.html\')">Quản trị tài khoản</div>';
 		}
 	}
-	console.log(str);
 	document.getElementById('left-menu').innerHTML = str;
 }

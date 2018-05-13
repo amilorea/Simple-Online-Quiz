@@ -80,31 +80,21 @@ h1 {
 .tableExam td {
 	border-collapse: collapse;
 	word-wrap: break-word;
-	padding: 1px 4px 1px 4px;
+	padding: 2px 4px 2px 4px;
 }
 .tableExam tr:first-child {
-	background-color: #ff8;
+	background-color: #9dd;
+}
+.tableExam tr:first-child > td {
+	padding: 4px;
+	text-align: center;
+	font-weight: bold;
 }
 .tableExam tr:first-child:hover {
 	background-color: #ff8;
 }
 .tableExam tr:hover {
 	background-color: #ddf;
-}
-.idCol {
-	width: 15%;
-	text-align: center;
-}
-.nameCol {
-	width: 55%;
-	text-align: left;
-}
-.teacherCol {
-	width: 20%;
-	text-align: left;
-}
-.pointCol {
-	text-align: center;
 }
 .visbleRow {
 }
