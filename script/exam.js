@@ -11,30 +11,16 @@ function getAllExam(){
 			case 200:
 				var content = returnObject['content'];
 				var prototypeRow = document.getElementById('prototype');
-				if(mode === 'simple'){
-					for(let data of content){
-						var newRow = prototypeRow.cloneNode(true);
-						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
-						newRow.setAttribute('id', 'exam' + data['id']);
-						newRow.classList.remove('hide');
-						prototypeRow.after(newRow);
-					}
-				} else {
-					for(let data of content){
-						var newRow = prototypeRow.cloneNode(true);
-						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-						newRow.getElementsByClassName('countCol')[0].innerHTML = data['countcol'];
-						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
-						//newRow.getElementsByClassName('yourPointCol')[0].innerHTML = data['yourpoint'];
-						newRow.setAttribute('id', 'exam' + data['id']);
-						newRow.classList.remove('hide');
-						prototypeRow.after(newRow);
-					}
+				for(let data of content){
+					var newRow = prototypeRow.cloneNode(true);
+					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
+					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
+					newRow.getElementsByClassName('countCol')[0].innerHTML = data['countcol'];
+					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
+					newRow.setAttribute('id', 'exam' + data['id']);
+					newRow.classList.remove('hide');
+					prototypeRow.after(newRow);
 				}
 				break;
 			case 400:
@@ -64,30 +50,15 @@ function getExamHistory(){
 			case 200:
 				var content = returnObject['content'];
 				var prototypeRow = document.getElementById('prototype');
-				if(mode === 'simple'){
-					for(let data of content){
-						var newRow = prototypeRow.cloneNode(true);
-						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
-						newRow.setAttribute('id', 'exam' + data['id']);
-						newRow.classList.remove('hide');
-						prototypeRow.after(newRow);
-					}
-				} else {
-					for(let data of content){
-						var newRow = prototypeRow.cloneNode(true);
-						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-						newRow.getElementsByClassName('countCol')[0].innerHTML = data['countcol'];
-						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
-						//newRow.getElementsByClassName('yourPointCol')[0].innerHTML = data['yourpoint'];
-						newRow.setAttribute('id', 'exam' + data['id']);
-						newRow.classList.remove('hide');
-						prototypeRow.after(newRow);
-					}
+				for(let data of content){
+					var newRow = prototypeRow.cloneNode(true);
+					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
+					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
+					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
+					newRow.setAttribute('id', 'exam' + data['id']);
+					newRow.classList.remove('hide');
+					prototypeRow.after(newRow);
 				}
 				break;
 			case 400:
@@ -102,8 +73,9 @@ function getExamHistory(){
 	};
 	request.open('GET', API + 'examHistoryHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
-	request.send(param);
-function getExam(id){
+	request.send();
+}
+/*function getExam(id){
 	var paramObject = {};
 	paramObject['id'] = id;
 	var param = JSON.stringify(paramObject);
@@ -162,26 +134,18 @@ function getExam(id){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function searchExam(mode){
+function searchExam(){
 	var paramObject = {};
-	if(mode === 'simple'){
-		paramObject['id'] = document.getElementById('search-id').value.trim();
-		paramObject['name'] = document.getElementById('search-name').value.trim();
-		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
-		paramObject['point'] = document.getElementById('search-point').value.trim();
-		var param = JSON.stringify(paramObject);
-		getExamHistory('simple', param);
-	} else {
-		paramObject['id'] = document.getElementById('search-id').value.trim();
-		paramObject['name'] = document.getElementById('search-name').value.trim();
-		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
-		paramObject['point'] = document.getElementById('search-point').value.trim();
-		paramObject['count'] = document.getElementById('search-count').value.trim();
-		paramObject['your-point'] = document.getElementById('search-your-point').value.trim();
-		var param = JSON.stringify(paramObject);
-		getExamHistory('complex', param);
-	}
+	paramObject['id'] = document.getElementById('search-id').value.trim();
+	paramObject['name'] = document.getElementById('search-name').value.trim();
+	paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
+	paramObject['point'] = document.getElementById('search-point').value.trim();
+	paramObject['count'] = document.getElementById('search-count').value.trim();
+	paramObject['your-point'] = document.getElementById('search-your-point').value.trim();
+	var param = JSON.stringify(paramObject);
+	getExamHistory();
 }
+*/
 var currentExam = {};
 var onGoingFlag = false;
 function examPreparing(){
@@ -207,6 +171,7 @@ function examCheck(){
 		return false;
 	} return true;
 }
+/*
 function submission(){
 	var paramObject = {};
 	paramObject['id'] = id;
@@ -252,4 +217,4 @@ function submission(){
 	request.open('POST', API + 'examHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
-}
+}*/

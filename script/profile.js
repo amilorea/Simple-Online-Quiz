@@ -59,19 +59,11 @@ function profileSave(){
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			unload(document.getElementById('Lưu'));
+			unload(document.getElementById('buttonEdit'), 'Lưu');
 			switch(this.status){
 			case 200:
-				notification(returnObject['message'], 'success');
-				if(returnObject['accountname'] !== undefined){
-					document.getElementById('accountname').innerHTML = returnObject['accountname'];
-					document.getElementById('accountnameWelcome').innerHTML = returnObject['accountname'];
-					var roleClass = 'role-' + _role;
-					document.getElementById('accountnameWelcome').classList.add(roleClass);
-				}
-				if(returnObject['password'] !== undefined){
-					document.getElementById('password').innerHTML = returnObject['password'];
-				}
+				//notification(returnObject['message'], 'success');
+				loadProfile();
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');
@@ -91,7 +83,7 @@ function profileSave(){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function loadProfile(user = ''){
+function loadProfile(){
 	var username = document.getElementById('username');
 	var password = document.getElementById('password');
 	var accountname = document.getElementById('accountname');
@@ -117,10 +109,11 @@ function loadProfile(user = ''){
 				document.getElementById('accountnameWelcome').innerHTML = '<b>' + returnObject['accountname'] + '</b>';
 				var roleClass = 'role-' + returnObject['role'];
 				document.getElementById('accountnameWelcome').classList.add(roleClass);
+				
+				document.getElementById('leftWelcome').innerHTML = 'Xin chào <b>' + returnObject['accountname'] + '</b><hr>';
+				document.getElementById('leftWelcome').classList.add(roleClass);
 
 				password.innerHTML = '**********';
-				
-				getExamHistory();
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');
