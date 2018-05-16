@@ -120,7 +120,7 @@ function loadProfile(user = ''){
 
 				password.innerHTML = '**********';
 				
-				getAllExam('simple', {});
+				getExamHistory();
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');

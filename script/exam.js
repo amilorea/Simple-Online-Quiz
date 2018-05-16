@@ -1,4 +1,4 @@
-function getAllExam(mode, param){
+function getAllExam(){
 	//Bắt đầu request
 	onload(document.getElementById('notification'), 30);
 	var request = new XMLHttpRequest();
@@ -30,7 +30,7 @@ function getAllExam(mode, param){
 						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
 						newRow.getElementsByClassName('countCol')[0].innerHTML = data['countcol'];
 						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
-						newRow.getElementsByClassName('yourPointCol')[0].innerHTML = data['yourpoint'];
+						//newRow.getElementsByClassName('yourPointCol')[0].innerHTML = data['yourpoint'];
 						newRow.setAttribute('id', 'exam' + data['id']);
 						newRow.classList.remove('hide');
 						prototypeRow.after(newRow);
@@ -49,8 +49,60 @@ function getAllExam(mode, param){
 	};
 	request.open('GET', API + 'examInfoHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
-	request.send(param);
+	request.send();
 }
+function getExamHistory(){
+	//Bắt đầu request
+	onload(document.getElementById('notification'), 30);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			unload(document.getElementById('notification'));
+			switch(this.status){
+			case 200:
+				var content = returnObject['content'];
+				var prototypeRow = document.getElementById('prototype');
+				if(mode === 'simple'){
+					for(let data of content){
+						var newRow = prototypeRow.cloneNode(true);
+						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
+						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
+						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
+						newRow.setAttribute('id', 'exam' + data['id']);
+						newRow.classList.remove('hide');
+						prototypeRow.after(newRow);
+					}
+				} else {
+					for(let data of content){
+						var newRow = prototypeRow.cloneNode(true);
+						newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
+						newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+						newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
+						newRow.getElementsByClassName('countCol')[0].innerHTML = data['countcol'];
+						newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
+						//newRow.getElementsByClassName('yourPointCol')[0].innerHTML = data['yourpoint'];
+						newRow.setAttribute('id', 'exam' + data['id']);
+						newRow.classList.remove('hide');
+						prototypeRow.after(newRow);
+					}
+				}
+				break;
+			case 400:
+				notification(returnObject['message'], 'error');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			}
+		}
+	};
+	request.open('GET', API + 'examHistoryHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
 function getExam(id){
 	var paramObject = {};
 	paramObject['id'] = id;
@@ -118,7 +170,7 @@ function searchExam(mode){
 		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
 		paramObject['point'] = document.getElementById('search-point').value.trim();
 		var param = JSON.stringify(paramObject);
-		getAllExam('simple', param);
+		getExamHistory('simple', param);
 	} else {
 		paramObject['id'] = document.getElementById('search-id').value.trim();
 		paramObject['name'] = document.getElementById('search-name').value.trim();
@@ -127,7 +179,7 @@ function searchExam(mode){
 		paramObject['count'] = document.getElementById('search-count').value.trim();
 		paramObject['your-point'] = document.getElementById('search-your-point').value.trim();
 		var param = JSON.stringify(paramObject);
-		getAllExam('complex', param);
+		getExamHistory('complex', param);
 	}
 }
 var currentExam = {};
