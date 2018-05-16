@@ -12,7 +12,7 @@
 		try {
 			//	Get param
 			$accountname = $requestData['accountname'];
-			$password = $requestData['password'];
+			$password = md5($requestData['password']);
 
 			if( $username == "" ){
 				$return['username']= $username;
@@ -54,6 +54,7 @@
 
 			if( $result ){
 				if( isset($_SESSION['user']) && strcmp( $_SESSION['user'], $username ) == 0 && $result ){
+					$_SESSION['account'] = $accountname;
 					$return['message'] = 'success';
 					http_response_code(200);
 				}
