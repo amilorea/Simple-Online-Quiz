@@ -2,6 +2,8 @@ h1 {
 	font-weight: bold;
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 25px;
+	margin-top: 10px;
+	margin-bottom: 12px;
 }
 #notification {
 	font-weight: bold;
@@ -9,8 +11,14 @@ h1 {
 	font-size: 17px;
 	padding: 4px;
 }
+input {
+	box-sizing: border-box;
+}
 .left {
 	text-align: left!important;
+}
+.no-padding {
+	padding: 0!important;
 }
 .role-0 > b {
 	color: #000;
@@ -62,6 +70,8 @@ h1 {
 }
 .tableResult tr:first-child {
 	background-color: #ff8;
+	text-align: center;
+	font-weight: bold;
 }
 .tableResult tr:first-child:hover {
 	background-color: #ff8;
@@ -83,6 +93,7 @@ h1 {
 	border-collapse: collapse;
 	word-wrap: break-word;
 	padding: 2px 4px 2px 4px;
+	border: 1px solid gray;
 }
 .tableExam tr:first-child {
 	background-color: #9dd;
@@ -147,6 +158,9 @@ button:disabled {
 .round-input {
 	border-radius: 3px;
 }
+.full-input {
+	width: 100%;
+}
 
 /* Button */
 .loginButton {
@@ -170,13 +184,24 @@ button:disabled {
 .saveButton {
 	background-color: orange;
 }
+.submitButton {
+	background-color: green;
+	color: white;
+}
 .backButton {
 	width: 100px;
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
+
+.short-button {
+	width: 35%;
+}
 .small-button {
 	width: 50px;
+}
+.double-small-button {
+	width: 100px;
 }
 .medium-button {
 	width: 150px;

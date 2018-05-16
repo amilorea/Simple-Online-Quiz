@@ -30,8 +30,7 @@
 				border-collapse: collapse;
 			}
 			.body-table td {
-				border-width: 0;
-				padding: 0;
+				border-collapse: collapse;
 			}
 			.top-frame {
 				width: 100%;
@@ -82,12 +81,17 @@
 		<script src="../script/account.js"></script>
 		<script src="../script/profile.js"></script>
 		<script src="../script/exam.js"></script>
+		<script src="../script/admin.js"></script>
 		<script type="text/javascript">
 			var _ROLE = Object.freeze({
 				'GUEST' : 0,
+				0 : 'GUEST',
 				'USER' : 1,
+				1 : 'USER',
 				'TEACHER' : 2,
-				'ADMIN' : 3
+				2 : 'TEACHER',
+				'ADMIN' : 3,
+				3 : 'ADMIN'
 			});
 			var _role, _name;
 			var _middleWidth;
@@ -155,6 +159,7 @@
 				request.send();
 			}
 			function loadMiddlePage(source, callback = function(){}){
+				if(examCheck() === false) return;
 				var target = document.getElementById('middle-frame');
 				
 				onload(target, 50);

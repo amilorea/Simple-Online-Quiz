@@ -91,7 +91,7 @@ function profileSave(){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function loadProfile(){
+function loadProfile(user = ''){
 	var username = document.getElementById('username');
 	var password = document.getElementById('password');
 	var accountname = document.getElementById('accountname');
@@ -120,7 +120,7 @@ function loadProfile(){
 
 				password.innerHTML = '**********';
 				
-				getAllExam('simple');
+				getAllExam('simple', {});
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');

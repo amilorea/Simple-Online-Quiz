@@ -1,0 +1,50 @@
+<style type="text/css">
+	.usernameCol {
+		width: 30%;
+	}
+	.accountnameCol {
+		width: 30%;
+	}
+	.passwordCol {
+		width: 15%;
+	}
+	.roleCol {
+		width: 10%;
+	}
+</style>
+<div id="userAdmin">
+	<h1>Quản trị người dùng</h1>
+	<div id="notification"></div>
+	<table class="tableResult">
+		<tr id="metaRow">
+			<td class="usernameCol">Tên đăng nhập</td>
+			<td class="accountnameCol">Tên người dùng</td>
+			<td class="passwordCol">Mật khẩu</td>
+			<td class="roleCol">Cấp bậc</td>
+			<td class="actionCol">Hành động</td>
+		</tr>
+		<tr id="search-bar">
+			<td class="usernameCol"><input type="text" id="username-id" class="full-input"></td>
+			<td class="accountnameCol"><input type="text" id="accountname-id" class="full-input"></td>
+			<td class="passwordCol"><input type="text" id="password-id" class="full-input"></td>
+			<td class="roleCol"><input type="text" id="role-id" class="full-input"></td>
+			<td class="action">
+				<button class="findButton small-button" type="button" onclick="searchUser()">Tìm</button>
+				<button class="cancelButton small-button" type="button" onclick="getAllUser()">Hủy</button>
+				<button class="insertButton double-small-button" type="button" onclick="addUser()">Thêm</button>
+			</td>
+		</tr>
+		<tr id="prototype" class="hide">
+			<td class="usernameCol"></td>
+			<td class="accountnameCol"></td>
+			<td class="passwordCol"></td>
+			<td class="roleCol"></td>
+			<td class="actionCol">
+				<button class="editButton small-button" type="button">Sửa</button>
+				<button class="cancelButton small-button hide" type="button">Hủy</button>
+				<button class="deleteButton double-small-button" type="button">Xóa</button>
+			</td>
+		</tr>
+	</table>
+	<div id="loader"></div>
+</div>

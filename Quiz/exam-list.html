@@ -3,30 +3,44 @@
 		width: 15%;
 	}
 	.nameCol {
-		width: 35%;
+		width: 40%;
 	}
 	.teacherCol {
-		width: 15%;
+		width: 20%;
 	}
 	.countCol {
 		width: 5%;
 	}
 	.pointCol {
-		width: 15%;
+		width: 10%;
 	}
 	.totalPointCol {
 	}
 </style>
 <div id="main-wrapper" class="wrapper">
-	<div id="notification"></div>
+	<h1>Danh sách các kỳ thi</h1>
 	<table class="tableExam" style="border-radius: 10px">
 		<tr id="metaRow">
-			<td class="idCol" style="border-radius: 10px 0 0 0">ID kỳ thi</td>
+			<td class="idCol">ID kỳ thi</td>
 			<td class="nameCol">Tên kỳ thi</td>
 			<td class="teacherCol">Giáo viên</td>
 			<td class="countCol">Số câu</td>
-			<td class="totalPointCol">Điểm</td>
-			<td class="pointCol" style="border-radius: 0 10px 0 0">Điểm của bạn</td>
+			<td class="totalPointCol">Điểm tối đa</td>
+			<td class="pointCol">Điểm của bạn</td>
+		</tr>
+		<tr id="search-bar">
+			<td class="idCol"><input type="text" id="search-id" class="full-input"></td>
+			<td class="nameCol"><input type="text" id="name-id" class="full-input"></td>
+			<td class="teacherCol"><input type="text" id="teacher-id" class="full-input"></td>
+			<td class="countCol"><input type="text" id="point-id" class="full-input"></td>
+			<td class="totalPointCol"><input type="text" id="teacher-id" class="full-input"></td>
+			<td class="pointCol"><input type="text" id="point-id" class="full-input"></td>
+		</tr>
+		<tr style="text-align: center">
+			<td colspan="6">
+				<button class="findButton short-button" type="button" onclick="searchExam('complex')">Tìm kiếm</button>
+				<button class="cancelButton short-button" type="button" onclick="getAllExam('complex')" disabled>Hủy</button>
+			</td>
 		</tr>
 		<tr id="prototype" class="hide">
 			<td class="idCol"></td>
@@ -37,4 +51,5 @@
 			<td class="pointCol"></td>
 		</tr>
 	</table>
+	<div id="notification"></div>
 </div>

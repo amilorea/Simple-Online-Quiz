@@ -40,7 +40,7 @@
 		text-align: center;
 	}
 </style>
-<div class="profile">
+<div id="userProfile">
 	<h1>Xin chào <span id="accountnameWelcome"></span></h1>
 	<hr>
 	<div style="padding: 0px 15px">
@@ -91,6 +91,18 @@
 					<td class="nameCol">Tên kỳ thi</td>
 					<td class="teacherCol">Giáo viên</td>
 					<td class="pointCol">Điểm</td>
+				</tr>
+				<tr id="search-bar">
+					<td class="idCol"><input type="text" id="search-id" class="full-input"></td>
+					<td class="nameCol"><input type="text" id="name-id" class="full-input"></td>
+					<td class="teacherCol"><input type="text" id="teacher-id" class="full-input"></td>
+					<td class="pointCol"><input type="text" id="point-id" class="full-input"></td>
+				</tr>
+				<tr style="text-align: center">
+					<td colspan="4">
+						<button class="findButton short-button" type="button" onclick="searchExam('simple')">Tìm kiếm</button>
+						<button class="cancelButton short-button" type="button" onclick="getAllExam('simple')">Hủy</button>
+					</td>
 				</tr>
 				<tr id="prototype" class="hide">
 					<td class="idCol"></td>

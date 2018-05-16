@@ -17,7 +17,7 @@
 		-ms-transition: all 0.3s ease;
 	}
 	.question:hover {
-		background-color: #ffebeb;
+		background-color: #fff;
 	}
 	.questionId {
 		display: inline-block;
@@ -36,13 +36,19 @@
 		display: inline-block;
 	}
 	.answerWrapper {
+		margin: 4px 4px 4px 15px;
+		color: black;
+		border-radius: 5px;
+		padding: 2px;
+	}
+	.answerWrapper:hover {
+		background-color: #aaa;
+	}
+	.choosenAnwser {
 		box-shadow: 0px 0px 2px 2px black, 0px 0px 1px 1px gray;
 		background-image: url('../img/noise.png');
 		background-color: #333;
-		padding: 2px;
-		border-radius: 5px;
 		color: white;
-		margin: 4px 4px 4px 15px;
 	}
 	.answerChecker {
 		width: 12px;
@@ -61,7 +67,7 @@
 		color: cyan;
 	}
 </style>
-<div id="main-wrapper" class="wrapper">
+<div id="main-wrapper" class="wrapper" onbeforeunload="examCheck()">
 	<div id="introduction"></div>
 	<div class="question" id="prototype">
 		<div class="questionId">Câu 1
@@ -72,21 +78,24 @@
 		</div>
 		<hr>
 		<div class="answerWrapper">
-			<input class="answerChecker" type="radio" name="" value="">
+			<input class="answerChecker" type="radio">
 			<div class="answer">Abcdefg</div>
 		</div>
 		<div class="answerWrapper">
-			<input class="answerChecker" type="radio" name="" value="">
+			<input class="answerChecker" type="radio">
 			<div class="answer">Abcdefg</div>
 		</div>
 		<div class="answerWrapper">
-			<input class="answerChecker" type="radio" name="" value="">
+			<input class="answerChecker" type="radio">
 			<div class="answer">Abcdefg</div>
 		</div>
 		<div class="answerWrapper">
-			<input class="answerChecker" type="radio" name="" value="">
+			<input class="answerChecker" type="radio">
 			<div class="answer">Abcdefg</div>
 		</div>
 	</div>
 	<div id="notification"></div>
+	<div style="text-align: center">
+		<button class="submitButton large-button" type="button" onclick="submission()">Nộp bài</button>
+	</div>
 </div>
