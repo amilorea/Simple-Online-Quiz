@@ -5,15 +5,14 @@
 
 	//	Make object return
 	$return = [];
-
+	$username = $_SESSION['user'];
+	$role = $_SESSION['role'];
 
 	if( strcmp( $_SERVER['REQUEST_METHOD'], 'POST' ) == 0 ) {
 		try {
 			//	Get param
 			$accountname = $requestData['accountname'];
-			$username = $requestData['username'];
 			$password = $requestData['password'];
-			$role = $requestData['role'];
 
 			if( $username == "" ){
 				$return['username']= $username;
@@ -33,17 +32,20 @@
 			$query = "UPDATE `user` SET ";
 
 			function addQuery( $columnName, $value){
-				if( !is_null( $value ) ){
-					if( $mountChanged > 0 )
-						$query = $query.", ";
-					$mountChanged++;
-					$query = $query." ".$columnName." = '".$value."'";
+				$query= "";
+				if( !is_null( $value ) && $value != "" ){
+					if( $GLOBALS['mountChanged'] > 0 )
+						$query = $GLOBALS['query'].', ';
+					else
+						$query = $GLOBALS['query'];
+					$GLOBALS['mountChanged']++;
+					$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
 				}
 			}
 
 			addQuery('accountname', $accountname);
 			addQuery('password', $password);
-			addQuery('role', $role);
+			// addQuery('role', $role);
 
 			$query= $query." WHERE username = '".$username."';";
 
@@ -59,7 +61,6 @@
 					$return['message'] = 'Invalid username!';
 					http_response_code(400);
 				}
-				mysqli_free_result($result);
 			}
 			else {
 				$return['message'] = 'Update error!!!';
@@ -74,8 +75,7 @@
 	else {
 		try {
 			//	Get param
-			$username = $requestData['username'];
-			$username = $_SESSION['user'];
+			// $username = $requestData['username'];
 
 			if( $username == "" ){
 				$return['username']= $username;

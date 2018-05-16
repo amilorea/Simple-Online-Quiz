@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 16, 2018 lúc 10:34 AM
+-- Thời gian đã tạo: Th5 16, 2018 lúc 11:09 AM
 -- Phiên bản máy phục vụ: 10.1.31-MariaDB
 -- Phiên bản PHP: 7.2.3
 
@@ -112,7 +112,7 @@ INSERT INTO `user` (`username`, `accountname`, `password`, `role`) VALUES
 ('equal', 'Bang', '465289687a70db7aa7217cc240c29f0f', 3),
 ('equal1', 'Bang sida', '465289687a70db7aa7217cc240c29f0f', 2),
 ('equal2', 'Bang tester', '465289687a70db7aa7217cc240c29f0f', 1),
-('sihc', 'Chi', '3d186804534370c3c817db0563f0e461', 3),
+('sihc', 'Chí Chí', '3d186804534370c3c817db0563f0e461', 3),
 ('sihcpro', 'Chi dep trai', '3d186804534370c3c817db0563f0e461', 2);
 
 -- --------------------------------------------------------
