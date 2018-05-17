@@ -7,7 +7,7 @@
 		box-shadow: 0px 0px 2px 2px black, 0px 0px 1px 1px gray;
 		background-color: #fbfbfb;
 		background-image: url('../img/noise.png');
-		margin: 5px 10px 5px 10px;
+		margin: 15px 10px 15px 10px;
 		padding: 10px 20px 10px 20px;
 		border-radius: 10px;
 		transition: all 0.3s ease;
@@ -41,13 +41,31 @@
 		border-radius: 5px;
 		padding: 2px;
 	}
+	.answerWrapperUnhover {
+		margin: 4px 4px 4px 15px;
+		color: black;
+		border-radius: 5px;
+		padding: 2px;
+	}
 	.answerWrapper:hover {
 		background-color: #aaa;
 	}
-	.choosenAnwser {
+	.choosenAnswer {
 		box-shadow: 0px 0px 2px 2px black, 0px 0px 1px 1px gray;
 		background-image: url('../img/noise.png');
 		background-color: #333;
+		color: white;
+	}
+	.wrongAnswer {
+		box-shadow: 0px 0px 2px 2px #f00, 0px 0px 1px 1px #fbb;
+		background-image: url('../img/noise.png');
+		background-color: #622;
+		color: white;
+	}
+	.acceptedAnswer {
+		box-shadow: 0px 0px 2px 2px #0f0, 0px 0px 1px 1px #bfb;
+		background-image: url('../img/noise.png');
+		background-color: #262;
 		color: white;
 	}
 	.answerChecker {
@@ -55,47 +73,44 @@
 		height: 12px;
 	}
 	.exam-name {
-		font-size: 20px;
+		font-size: 24px;
 		font-weight: bold;
-		color: orange;
+		color: red;
 		text-align: center;
 	}
 	.exam-author {
-		font-size: 15px;
+		font-size: 20px;
 		text-decoration: underline;
 		text-align: center;
-		color: cyan;
+		color: orange;
 	}
 </style>
 <div id="main-wrapper" class="wrapper" onbeforeunload="examCheck()">
 	<div id="introduction"></div>
-	<div class="question" id="prototype">
-		<div class="questionId">Câu 1
-		</div>
-		<div class="questionScore">(0.25)
-		</div> : 
-		<div class="questionContent">Nhưng vì kiếm Tây rất mạnh, nên mấu chốt của trường phái kiếm Tây là động tác tay. Còn vì kiếm Nhật rất lởm, nên trường phái kiếm Nhật lại là toàn thân. :v Trong thực chiến, 2 samurai sẽ không rút kiếm ra bem nhau như phim, mà cả hai sẽ thủ sẵn kiếm bên hông, đốc kiếm hướng về phía địch - cái này rất quan trọng, vì bọn nó cần che giấu độ dài của kiếm, để đối phương không biết tầm đánh của mình. Bọn nó cứ thế di chuyển vòng quanh và quan sát nhau, không rút kiếm khỏi vỏ. Khi một trong hai bên nhìn thấy cơ hội và rút kiếm, bên còn lại phải phản ứng. Trận đấu thường sẽ kết thúc trong 1 nhát chém và 1 nhát đâm, phần còn lại hoàn toàn nằm ở thân pháp. Kata của Nhật nó dùng kiếm gỗ che giấu ý nghĩa thật sự của động tác kiếm thép, luyện thành trí nhớ cơ bắp rồi thì sư phụ mới giải thích ý nghĩa. :v Các động tác chém kiểu kata sẽ dùng kiếm để cắt vào ngón tay của địch đang lao tới, chặt tay địch, hoặc tạo ra các vết thương nhỏ nhỏ disable. Phần còn lại là chân, thường sẽ xoay người về 1 bên né đòn chém xuống (không rõ vì sao bọn nó không chém chéo :V), để lựa thế ra đòn. Nói chung samurai đánh nhau thật thì người ngoài nhìn dell hiểu gì đâu, bọn trong cuộc mới hiểu. :V
-		</div>
+	<div class="question hide" id="prototype">
+		<div class="questionId"></div>
+		<div class="questionScore"></div> : 
+		<div class="questionContent"></div>
 		<hr>
 		<div class="answerWrapper">
 			<input class="answerChecker" type="radio">
-			<div class="answer">Abcdefg</div>
+			<div class="answer"></div>
 		</div>
 		<div class="answerWrapper">
 			<input class="answerChecker" type="radio">
-			<div class="answer">Abcdefg</div>
+			<div class="answer"></div>
 		</div>
 		<div class="answerWrapper">
 			<input class="answerChecker" type="radio">
-			<div class="answer">Abcdefg</div>
+			<div class="answer"></div>
 		</div>
 		<div class="answerWrapper">
 			<input class="answerChecker" type="radio">
-			<div class="answer">Abcdefg</div>
+			<div class="answer"></div>
 		</div>
 	</div>
 	<div id="notification"></div>
 	<div style="text-align: center">
-		<button class="submitButton large-button" type="button" onclick="submission()">Nộp bài</button>
+		<button id="submit-button" class="submitButton large-button" type="button" onclick="submission()">Nộp bài</button>
 	</div>
 </div>
