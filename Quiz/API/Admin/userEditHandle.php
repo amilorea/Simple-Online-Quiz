@@ -1,0 +1,90 @@
+<?php
+	session_start();
+	header('Content-type: application/json');
+	$requestData = json_decode(file_get_contents('php://input'), true);
+
+	//	Make object return
+	$return = [];
+
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(strcmp($_SESSION['role'], '3')!=0){
+		$return['message']= "You aren't Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
+	try {
+		//	Get Params
+		$username = $requestData['username'];
+		$accountname = $requestData['accountname'];
+		$password = md5($requestData['password']);
+
+		if( $username == "" ){
+			$return['username']= $username;
+			$result['message'] = 'Require username!';
+			echo json_encode((object)$return);
+			http_response_code(404);
+			throw new Exception($return['mesage']);
+		}
+
+			//	Connect
+			$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
+			mysqli_set_charset($connector, 'utf8');
+			$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+
+			//	Query
+			$mountChanged= 0;
+			$query = "UPDATE `user` SET ";
+
+			function addQuery( $columnName, $value){
+				$query= "";
+				if( !is_null( $value ) && $value != "" ){
+					if( $GLOBALS['mountChanged'] > 0 )
+						$query = $GLOBALS['query'].', ';
+					else
+						$query = $GLOBALS['query'];
+					$GLOBALS['mountChanged']++;
+					$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
+				}
+			}
+
+			addQuery('accountname', $accountname);
+			addQuery('password', $password);
+			// addQuery('role', $role);
+
+			$query= $query." WHERE username = '".$username."';";
+
+			$return['query'] = $query;
+			$result = mysqli_query($connector, $query);
+
+			if( $result ){
+				if( isset($_SESSION['user']) && strcmp( $_SESSION['user'], $username ) == 0 && $result ){
+					$_SESSION['account'] = $accountname;
+					$return['message'] = 'success';
+					http_response_code(200);
+				}
+				else {
+					$return['message'] = 'Invalid username!';
+					http_response_code(400);
+				}
+			}
+			else {
+				$return['message'] = 'Update error!!!';
+				http_response_code(500);
+			}
+			mysqli_free_result($result);
+		}
+		else {
+			$return['message'] = 'Server error!!!';
+			http_response_code(500);
+		}
+		echo json_encode((object)$return);
+	} catch ( Exception $error ) {
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+?>

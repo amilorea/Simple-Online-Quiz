@@ -3,20 +3,25 @@
 	header('Content-type: application/json');
 	//	Make object return
 	$return = [];
-	if(!isset($_SESSION['user'])){
+
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
 		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(strcmp($_SESSION['role'], '3')!=0){
+		$return['message']= "You aren't Admin!";
 		echo json_encode((object)$return);
 		http_response_code(400);
 	}
 	else
 	try {
-		$username = $_SESSION['user'];
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 		//	Query
-		$query = "SELECT userhistory.*, contest.contestname, user.accountname FROM `userhistory` INNER JOIN `contest` ON contest.ID = contestID INNER JOIN `user` ON contest.teacher = user.username WHERE userhistory.username = '".$username."';";
+		$query = "SELECT * FROM `user`";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 		if( $result ){
@@ -24,13 +29,12 @@
 				$cnt= 0;
 				$contentArr= [];
 				while($dataRow = mysqli_fetch_array($result, MYSQLI_BOTH)){
-					// $return["".$cnt] = $dataRow;
 					$rowArr = [];
-					$rowArr['id']= $dataRow['historyID'];
-					$rowArr['name']= $dataRow['contestname'];
-					$rowArr['teacher']= $dataRow['accountname'];
-					$rowArr['yourpoint']= $dataRow['mark'];
-					// $rowArr['id']= $dataRow['id'];
+					$rowArr['accountname'] = $dataRow['accountname'];
+					$rowArr['username'] = $dataRow['username'];
+					$rowArr['password'] = $dataRow['password'];
+					$rowArr['role'] = $dataRow['role'];
+
 					$contentArr[$cnt] = $rowArr;
 					$cnt += 1;
 				}
@@ -39,7 +43,7 @@
 				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'Lịch sử trống!';
+				$return['message'] = 'There are no User!';
 				http_response_code(400);
 			}
 			mysqli_free_result($result);

@@ -10,7 +10,7 @@
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 		//	Query
-		$query = "SELECT ID, contestname, teacher, created, COUNT( question.questionID ) as count, SUM(question.point) as total FROM `contest` LEFT OUTER JOIN `question` ON question.`contestID` = contest.ID GROUP BY contest.ID";
+		$query = "SELECT contest.*, accountname, COUNT( question.questionID ) as count, SUM(question.point) as total FROM `contest` INNER JOIN `user` ON user.username = contest.teacher LEFT OUTER JOIN `question` ON question.contestID = contest.ID GROUP BY contest.ID";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 		if( $result ){
@@ -21,7 +21,7 @@
 					$rowArr = [];
 					$rowArr['id']= $dataRow['ID'];
 					$rowArr['name']= $dataRow['contestname'];
-					$rowArr['teacher']= $dataRow['teacher'];
+					$rowArr['teacher']= $dataRow['accountname'];
 					$rowArr['totalpoint']= $dataRow['total'];
 					$rowArr['questioncount']= $dataRow['count'];
 					// $rowArr['id']= $dataRow['id'];

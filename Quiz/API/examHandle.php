@@ -5,14 +5,14 @@
 
 	//	Make object return
 	$return = [];
-	// if(!isset($_SESSION['user'])){
-	// 	$return['message']= 'Invalid user session!';
-	// 	echo json_encode((object)$return);
-	// 	http_response_code(400);
-	// }
-	// else
+	if(!isset($_SESSION['user'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
-		// $username = $_SESSION['user'];
+		$username = $_SESSION['user'];
 		//	Get params
 		$return['params'] = $requestData;
 		$contestID = $requestData['id'];
