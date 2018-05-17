@@ -20,7 +20,7 @@ function menuMaker(role){
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-moderator.html\')">Quản lý đề thi</div><hr>';
 		}
 		if(role >= _ROLE.ADMIN){
-			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-admin.html\')">Quản trị đề thi</div>';
+			//str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-admin.html\')">Quản trị đề thi</div>';
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'user-admin.html\', function(){ return getAllUser() })">Quản trị tài khoản</div>';
 		}
 	}

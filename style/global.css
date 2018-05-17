@@ -11,6 +11,12 @@ h1 {
 	font-size: 17px;
 	padding: 4px;
 }
+.announcement {
+	font-weight: bold;
+	color: #0095ef;
+	text-decoration: underline;
+	font-size: 20px;
+}
 input {
 	box-sizing: border-box;
 }
@@ -61,7 +67,7 @@ input {
 	table-layout: fixed;
 	border-collapse: collapse;
 	width: 100%;
-   background-color: #fafafa;
+	background-color: #fafafa;
 }
 .tableResult td {
 	border-collapse: collapse;
