@@ -29,7 +29,7 @@
 					$rowArr['id']= $dataRow['historyID'];
 					$rowArr['name']= $dataRow['contestname'];
 					$rowArr['teacher']= $dataRow['teacher'];
-					$rowArr['yourpoint']= $dataRow['Mark'];
+					$rowArr['yourpoint']= $dataRow['mark'];
 					// $rowArr['id']= $dataRow['id'];
 					$contentArr[$cnt] = $rowArr;
 					$cnt += 1;
@@ -39,7 +39,7 @@
 				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'Your history is empty!';
+				$return['message'] = 'Lịch sử trống!';
 				http_response_code(400);
 			}
 			mysqli_free_result($result);

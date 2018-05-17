@@ -14,7 +14,6 @@
 	try {
 		// $username = $_SESSION['user'];
 		//	Get params
-		$return['params'] = $requestData;
 		$contestID = $requestData['id'];
 
 		//	Connect

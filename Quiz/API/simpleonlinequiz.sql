@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 16, 2018 lúc 11:09 AM
+-- Thời gian đã tạo: Th5 17, 2018 lúc 05:03 AM
 -- Phiên bản máy phục vụ: 10.1.31-MariaDB
 -- Phiên bản PHP: 7.2.3
 
@@ -50,8 +50,8 @@ INSERT INTO `contest` (`ID`, `contestname`, `teacher`, `created`) VALUES
 --
 
 CREATE TABLE `question` (
-  `ID` int(11) NOT NULL,
-  `contest` int(11) NOT NULL,
+  `questionID` int(11) NOT NULL,
+  `contestID` int(11) NOT NULL,
   `question` text COLLATE utf8_unicode_ci NOT NULL,
   `A` text COLLATE utf8_unicode_ci NOT NULL,
   `B` text COLLATE utf8_unicode_ci NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `question` (
 -- Đang đổ dữ liệu cho bảng `question`
 --
 
-INSERT INTO `question` (`ID`, `contest`, `question`, `A`, `B`, `C`, `D`, `correct`, `point`) VALUES
+INSERT INTO `question` (`questionID`, `contestID`, `question`, `A`, `B`, `C`, `D`, `correct`, `point`) VALUES
 (1, 1, 'What is that?', 'That is what?', 'What that is?', 'Is that what?', 'Is that, What?', 'A', 2.75),
 (2, 2, 'Does Bang free?', 'Yes, He is.', 'Yes, he does.', 'No, he doesn\'t', 'No, he didn\'t.', 'B', 2.25),
 (3, 2, 'Do you like English?', 'Yes, I\'m.', 'Yes, I\'ll.', 'No, I didn\'t.', 'No never!', 'D', 3.25);
@@ -112,7 +112,8 @@ INSERT INTO `user` (`username`, `accountname`, `password`, `role`) VALUES
 ('equal', 'Bang', '465289687a70db7aa7217cc240c29f0f', 3),
 ('equal1', 'Bang sida', '465289687a70db7aa7217cc240c29f0f', 2),
 ('equal2', 'Bang tester', '465289687a70db7aa7217cc240c29f0f', 1),
-('sihc', 'Chí Chí', '3d186804534370c3c817db0563f0e461', 3),
+('sihc', 'Chí', '3d186804534370c3c817db0563f0e461', 3),
+('sihc2', 'sihc', '3d186804534370c3c817db0563f0e461', 1),
 ('sihcpro', 'Chi dep trai', '3d186804534370c3c817db0563f0e461', 2);
 
 -- --------------------------------------------------------
@@ -124,16 +125,16 @@ INSERT INTO `user` (`username`, `accountname`, `password`, `role`) VALUES
 CREATE TABLE `userhistory` (
   `historyID` int(11) NOT NULL,
   `username` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `ContestID` int(11) NOT NULL,
-  `Mark` float NOT NULL DEFAULT '0',
-  `Time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `contestID` int(11) NOT NULL,
+  `mark` float NOT NULL DEFAULT '0',
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `userhistory`
 --
 
-INSERT INTO `userhistory` (`historyID`, `username`, `ContestID`, `Mark`, `Time`) VALUES
+INSERT INTO `userhistory` (`historyID`, `username`, `contestID`, `mark`, `time`) VALUES
 (1, 'equal', 1, 7, '2018-05-16 10:56:38'),
 (2, 'equal', 2, 8, '2018-05-16 10:56:38'),
 (3, 'sihc', 1, 7, '2018-05-16 10:57:07'),
@@ -154,8 +155,8 @@ ALTER TABLE `contest`
 -- Chỉ mục cho bảng `question`
 --
 ALTER TABLE `question`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `belongToContest` (`contest`);
+  ADD PRIMARY KEY (`questionID`),
+  ADD KEY `belongToContest` (`contestID`);
 
 --
 -- Chỉ mục cho bảng `role`
@@ -176,7 +177,7 @@ ALTER TABLE `user`
 ALTER TABLE `userhistory`
   ADD PRIMARY KEY (`historyID`),
   ADD KEY `user` (`username`),
-  ADD KEY `contest` (`ContestID`);
+  ADD KEY `contest` (`contestID`);
 
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
@@ -192,7 +193,7 @@ ALTER TABLE `contest`
 -- AUTO_INCREMENT cho bảng `question`
 --
 ALTER TABLE `question`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `questionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `userhistory`
@@ -208,7 +209,7 @@ ALTER TABLE `userhistory`
 -- Các ràng buộc cho bảng `question`
 --
 ALTER TABLE `question`
-  ADD CONSTRAINT `belongToContest` FOREIGN KEY (`contest`) REFERENCES `contest` (`ID`);
+  ADD CONSTRAINT `belongToContest` FOREIGN KEY (`contestID`) REFERENCES `contest` (`ID`);
 
 --
 -- Các ràng buộc cho bảng `user`
