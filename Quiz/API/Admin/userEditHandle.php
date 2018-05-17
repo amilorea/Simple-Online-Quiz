@@ -22,6 +22,7 @@
 		$username = $requestData['username'];
 		$accountname = $requestData['accountname'];
 		$password = md5($requestData['password']);
+		$role = $requestData['role'];
 
 		if( $username == "" ){
 			$return['username']= $username;
@@ -54,7 +55,7 @@
 
 			addQuery('accountname', $accountname);
 			addQuery('password', $password);
-			// addQuery('role', $role);
+			addQuery('role', $role);
 
 			$query= $query." WHERE username = '".$username."';";
 

@@ -44,6 +44,8 @@
 			}
 			else {
 				$return['message'] = 'Invalid username or password!';
+				$return['username']= $username;
+				$return['password']= $password;
 				http_response_code(400);
 			}
 			mysqli_free_result($result);

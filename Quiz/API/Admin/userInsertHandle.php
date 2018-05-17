@@ -6,25 +6,22 @@
 	//	Make object return
 	$return = [];
 
-	//	Get param
-	$username = $requestData['username'];
-	$accountname = $requestData['accountname'];
-	$password = md5($requestData['password']);
-
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(strcmp($_SESSION['role'], '3')!=0){
+		$return['message']= "You aren't Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
-		if( !( strrpos($username," ") === false ) ){
-			$return['username'] = $username;
-			$return['message'] = 'Username can\'t have space';
-			throw new Exception($return['message']);
-		}
-
-		if( $username == "" || $accountname == "" || $password == "" ){
-			$return['accountname']= $accountname;
-			$return['username']= $username;
-			$return['password']= $password;
-			$return['message'] = 'Require username, accountname and password!';
-			throw new Exception($return['message']);
-		}
+		//	Get param
+		$username = $requestData['username'];
+		$accountname = $requestData['accountname'];
+		$password = md5($requestData['password']);
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -36,12 +33,8 @@
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
-		$return['result'] = $result;
-		$return['boolean'] = NULL != false;
 		if( $result != NULL ){
 			if( $result ){
-				$_SESSION['user'] = $username;
-				$_SESSION['role'] = 1;
 				$return['message'] = 'success';
 				http_response_code(200);
 			}
@@ -51,7 +44,7 @@
 			}
 		}
 		else {
-			$return['message'] = 'Register error!!!';
+			$return['message'] = 'Server error!!!';
 			http_response_code(500);
 		}
 		echo json_encode((object)$return);
