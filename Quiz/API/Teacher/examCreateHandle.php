@@ -44,7 +44,7 @@
 
 		//	Query
 		$query1 = "INSERT INTO `contest` ( contestname, teacher ) VALUES ('".$contestname."', '".$teacher."');";
-		$query2 = "INSERT INTO `question` ".$rowInQuery." VALUE ".$valueInQuery.";";
+		$query2 = "INSERT INTO `question` ".$rowInQuery." VALUES ".$valueInQuery.";";
 		$return['query1'] = $query1;
 		$return['query2'] = $query2;
 		// mysqli_query($connector, $query);

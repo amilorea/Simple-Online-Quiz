@@ -22,6 +22,7 @@
 		$username = $requestData['username'];
 		$accountname = $requestData['accountname'];
 		$password = md5($requestData['password']);
+		$role = $requestData['role'];
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -29,7 +30,7 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$password."', 1);";
+		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$password."', ".$role.");";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
