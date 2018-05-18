@@ -15,13 +15,12 @@
 			$password = $requestData['password'];
 			$passwordMD5 = md5($password);
 
-			if( strcpm($username, "")*strcmp($password, "") == 0 ){
+			if( strcmp($username, "")*strcmp($password, "") == 0 ){
 				$return['username']= $username;
 				$return['password']= $password;
-				$result['message'] = 'Require username and password!';
-				echo json_encode((object)$return);
+				$return['message'] = 'Require username and password!';
 				http_response_code(404);
-				throw new Exception($return['mesage']);
+				throw new Exception($return['message']);
 			}
 
 			//	Connect
