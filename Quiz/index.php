@@ -81,7 +81,8 @@
 		<script src="../script/account.js"></script>
 		<script src="../script/profile.js"></script>
 		<script src="../script/exam.js"></script>
-		<script src="../script/admin.js"></script>
+		<script src="../script/accountManager.js"></script>
+		<script src="../script/examManager.js"></script>
 		<script type="text/javascript">
 			var _ROLE = Object.freeze({
 				'GUEST' : 0,
@@ -93,6 +94,7 @@
 				'ADMIN' : 3,
 				3 : 'ADMIN'
 			});
+			var _roleCount = 4;
 			var _role, _name;
 			var _middleWidth;
 			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['account'] ?>'){
