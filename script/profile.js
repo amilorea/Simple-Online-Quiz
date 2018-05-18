@@ -59,14 +59,11 @@ function profileSave(){
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			unload(document.getElementById('buttonEdit'), 'Lưu');
+			unload(document.getElementById('buttonEdit'), 'Sửa');
 			switch(this.status){
 			case 200:
 				//notification(returnObject['message'], 'success');
 				loadProfile();
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
 				break;
 			case 401:
 				notification(returnObject['message'], 'error');
@@ -75,6 +72,9 @@ function profileSave(){
 			case 404:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
 				break;
 			}
 		}

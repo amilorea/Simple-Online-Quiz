@@ -1,43 +1,3 @@
-function getAllExam(){
-	//Bắt đầu request
-	onload(document.getElementById('notification'), 30);
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-		if (this.readyState == 4) {
-			logParam(this.responseText);
-			var returnObject = JSON.parse(this.responseText);
-			unload(document.getElementById('notification'));
-			switch(this.status){
-			case 200:
-				var content = returnObject['content'];
-				var prototypeRow = document.getElementById('prototype');
-				for(var cnt = content.length; cnt > 0; cnt--){
-					var data = content[cnt - 1];
-					var newRow = prototypeRow.cloneNode(true);
-					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-					newRow.getElementsByClassName('countCol')[0].innerHTML = data['questioncount'];
-					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
-					newRow.setAttribute('id', 'exam' + data['id']);
-					newRow.classList.remove('hide');
-					prototypeRow.after(newRow);
-				}
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
-				break;
-			case 404:
-				notification(returnObject['message'], 'error');
-				loadMiddlePage('main.html');
-				break;
-			}
-		}
-	};
-	request.open('GET', API + 'examInfoHandle.php');
-	request.setRequestHeader('Content-type', 'application/json');
-	request.send();
-}
 function getExamHistory(){
 	//Bắt đầu request
 	onload(document.getElementById('notification'), 30);
@@ -139,13 +99,15 @@ function getExam(id){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function searchExam(){
+function searchExam(mode){
 	var paramObject = {};
-	paramObject['id'] = document.getElementById('search-id').value.trim();
-	paramObject['name'] = document.getElementById('search-name').value.trim();
-	paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
-	paramObject['totalpoint'] = document.getElementById('search-point').value.trim();
-	paramObject['questioncount'] = document.getElementById('search-count').value.trim();
+	if(mode !== 'restore') {
+		paramObject['id'] = document.getElementById('search-id').value.trim();
+		paramObject['name'] = document.getElementById('search-name').value.trim();
+		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
+		paramObject['totalpoint'] = document.getElementById('search-point').value.trim();
+		paramObject['questioncount'] = document.getElementById('search-count').value.trim();
+	}
 	var param = JSON.stringify(paramObject);
 	logParam(param);
 	
@@ -156,6 +118,7 @@ function searchExam(){
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
+			logParam(returnObject);
 			unload(document.getElementById('notification'));
 			switch(this.status){
 			case 200:
@@ -172,8 +135,10 @@ function searchExam(){
 					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
 					newRow.getElementsByClassName('countCol')[0].innerHTML = data['questioncount'];
 					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
-					newRow.setAttribute('id', 'exam' + data['id']);
 					newRow.classList.remove('hide');
+					newRow.classList.add('searchable');
+					newRow.setAttribute('id', 'exam' + data['id']);
+					console.log(newRow);
 					prototypeRow.after(newRow);
 				}
 				break;
@@ -259,15 +224,17 @@ function submission(id){
 						var targetAnswerParent = targetAnswer.parentElement;
 						targetAnswer.setAttribute('disabled', '');
 						if(targetAnswerParent.classList.contains('choosenAnswer')){
-							if(flag) targetAnswerParent.classList.add('acceptedAnswer');
-							else targetAnswerParent.classList.add('wrongAnswer');
+							if(!flag) targetAnswerParent.classList.add('wrongAnswer');
+						}
+						if(targetAnswer.value === data['answer']){
+							targetAnswerParent.classList.add('acceptedAnswer');
 						}
 						targetAnswerParent.classList.remove('answerWrapper');
 						targetAnswerParent.classList.remove('choosenAnswer');
 						targetAnswerParent.classList.add('answerWrapperUnhover');
 					}
 				}
-				var announcement = '<div class="announcement">Số điểm của bạn là </div>';
+				var announcement = '<div class="announcement">Số điểm của bạn là ' + returnObject['totalpoint'] + '</div>';
 				notification(announcement, 'announcement');
 				document.getElementById('submit-button').remove();
 				break;
