@@ -33,7 +33,7 @@
 				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'There are no Contest!';
+				$return['message'] = 'Không có kì thi nào!';
 				http_response_code(400);
 			}
 			mysqli_free_result($result);
