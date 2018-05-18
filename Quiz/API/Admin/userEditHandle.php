@@ -81,7 +81,6 @@
 			$return['message'] = 'Update error!!!';
 			http_response_code(500);
 		}
-		mysqli_free_result($result);
 		echo json_encode((object)$return);
 	} catch ( Exception $error ) {
 		echo json_encode((object)$return);

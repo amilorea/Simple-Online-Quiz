@@ -18,7 +18,7 @@
 			throw new Exception($return['message']);
 		}
 
-		if( $username == "" || $accountname == "" || $password == "" ){
+		if( strcmp($username,"")*strcmp($accountname,"")*strcmp($password,"") == 0 ){
 			$return['accountname']= $accountname;
 			$return['username']= $username;
 			$return['password']= $password;

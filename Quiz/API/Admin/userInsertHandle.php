@@ -19,6 +19,20 @@
 	}
 	else
 	try {
+		if( !( strrpos($username," ") == false ) ){
+			$return['username'] = $username;
+			$return['message'] = 'Username can\'t have space';
+			throw new Exception($return['message']);
+		}
+
+		if( strcmp($username,"")*strcmp($accountname,"")*strcmp($password,"") == 0 ){
+			$return['accountname']= $accountname;
+			$return['username']= $username;
+			$return['password']= $password;
+			$return['message'] = 'Require username, accountname and password!';
+			throw new Exception($return['message']);
+		}
+
 		//	Get param
 		$username = $requestData['username'];
 		$accountname = $requestData['accountname'];
