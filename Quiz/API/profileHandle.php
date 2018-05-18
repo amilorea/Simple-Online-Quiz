@@ -12,11 +12,13 @@
 		try {
 			//	Get param
 			$accountname = $requestData['accountname'];
-			$password = md5($requestData['password']);
+			$password = $requestData['password'];
+			$passwordMD5 = md5($password);
 
-			if( $username == "" ){
+			if( strcpm($username, "")*strcmp($password, "") == 0 ){
 				$return['username']= $username;
-				$result['message'] = 'Require username!';
+				$return['password']= $password;
+				$result['message'] = 'Require username and password!';
 				echo json_encode((object)$return);
 				http_response_code(404);
 				throw new Exception($return['mesage']);
@@ -44,7 +46,7 @@
 			}
 
 			addQuery('accountname', $accountname);
-			addQuery('password', $password);
+			addQuery('password', $passwordMD5);
 			// addQuery('role', $role);
 
 			$query= $query." WHERE username = '".$username."';";

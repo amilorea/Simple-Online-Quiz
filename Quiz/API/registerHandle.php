@@ -41,6 +41,7 @@
 		if( $result != NULL ){
 			if( $result ){
 				$_SESSION['user'] = $username;
+				$_SESSION['account'] = $accountname;
 				$_SESSION['role'] = 1;
 				$return['message'] = 'success';
 				http_response_code(200);

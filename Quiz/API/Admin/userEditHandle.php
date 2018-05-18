@@ -6,12 +6,13 @@
 	//	Make object return
 	$return = [];
 
+	$Admin = 3;
 	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
 		$return['message']= 'Invalid user session!';
 		echo json_encode((object)$return);
 		http_response_code(400);
 	}
-	elseif(strcmp($_SESSION['role'], '3')!=0){
+	elseif(intval($_SESSION['role']) < $Admin){
 		$return['message']= "You aren't Admin!";
 		echo json_encode((object)$return);
 		http_response_code(400);
@@ -21,68 +22,66 @@
 		//	Get Params
 		$username = $requestData['username'];
 		$accountname = $requestData['accountname'];
-		$password = md5($requestData['password']);
+		$password = $requestData['password'];
+		$passwordMD5 = MD5($password);
 		$role = $requestData['role'];
 
-		if( $username == "" ){
+		if( strcmp($username, "")*strcmp($password, "") == 0 ){
 			$return['username']= $username;
-			$result['message'] = 'Require username!';
-			echo json_encode((object)$return);
+			$return['password']= $password;
+			$return['message'] = 'Require username or password!';
+			// echo json_encode((object)$return);
 			http_response_code(404);
-			throw new Exception($return['mesage']);
+			throw new Exception($return['message']);
 		}
 
-			//	Connect
-			$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
-			mysqli_set_charset($connector, 'utf8');
-			$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+		//	Connect
+		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
+		mysqli_set_charset($connector, 'utf8');
+		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
-			//	Query
-			$mountChanged= 0;
-			$query = "UPDATE `user` SET ";
+		//	Query
+		$mountChanged= 0;
+		$query = "UPDATE `user` SET ";
 
-			function addQuery( $columnName, $value){
-				$query= "";
-				if( !is_null( $value ) && $value != "" ){
-					if( $GLOBALS['mountChanged'] > 0 )
-						$query = $GLOBALS['query'].', ';
-					else
-						$query = $GLOBALS['query'];
-					$GLOBALS['mountChanged']++;
-					$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
-				}
+		function addQuery( $columnName, $value){
+			$query= "";
+			if( !is_null( $value ) && $value != "" ){
+				if( $GLOBALS['mountChanged'] > 0 )
+					$query = $GLOBALS['query'].', ';
+				else
+					$query = $GLOBALS['query'];
+				$GLOBALS['mountChanged']++;
+				$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
 			}
+		}
 
-			addQuery('accountname', $accountname);
-			addQuery('password', $password);
-			addQuery('role', $role);
+		addQuery('accountname', $accountname);
+		addQuery('password', $passwordMD5);
+		addQuery('role', $role);
 
-			$query= $query." WHERE username = '".$username."';";
+		$query= $query." WHERE username = '".$username."';";
 
-			$return['query'] = $query;
-			$result = mysqli_query($connector, $query);
+		$return['query'] = $query;
+		$result = mysqli_query($connector, $query);
 
-			if( $result ){
-				if( isset($_SESSION['user']) && strcmp( $_SESSION['user'], $username ) == 0 && $result ){
-					$_SESSION['account'] = $accountname;
-					$return['message'] = 'success';
-					http_response_code(200);
-				}
-				else {
-					$return['message'] = 'Invalid username!';
-					http_response_code(400);
-				}
+		$return['amount'] = mysqli_affected_rows($connector);
+		if( $result ){
+			if( mysqli_affected_rows($connector) > 0 ){
+				$_SESSION['account'] = $accountname;
+				$return['message'] = 'success';
+				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'Update error!!!';
-				http_response_code(500);
+				$return['message'] = 'Nothing change!';
+				http_response_code(400);
 			}
-			mysqli_free_result($result);
 		}
 		else {
-			$return['message'] = 'Server error!!!';
+			$return['message'] = 'Update error!!!';
 			http_response_code(500);
 		}
+		mysqli_free_result($result);
 		echo json_encode((object)$return);
 	} catch ( Exception $error ) {
 		echo json_encode((object)$return);

@@ -4,12 +4,13 @@
 	//	Make object return
 	$return = [];
 
+	$Admin = 3;
 	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
 		$return['message']= 'Invalid user session!';
 		echo json_encode((object)$return);
 		http_response_code(400);
 	}
-	elseif(strcmp($_SESSION['role'], '3')!=0){
+	elseif(intval($_SESSION['role']) < $Admin){
 		$return['message']= "You aren't Admin!";
 		echo json_encode((object)$return);
 		http_response_code(400);
