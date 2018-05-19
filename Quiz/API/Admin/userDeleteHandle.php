@@ -21,6 +21,7 @@
 	try {
 		//	Get param
 		$username = $requestData['username'];
+		$return['params'] = $requestData;
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());

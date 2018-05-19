@@ -19,6 +19,15 @@
 	}
 	else
 	try {
+		//	Get param
+		$username = $requestData['username'];
+		$accountname = $requestData['accountname'];
+		$password = $requestData['password'];
+		$passwordMD5 = md5($password);
+		$role = $requestData['role'];
+		if( $role == NULL )
+			$role = 1;
+
 		if( !( strrpos($username," ") == false ) ){
 			$return['username'] = $username;
 			$return['message'] = 'Username can\'t have space';
@@ -33,19 +42,13 @@
 			throw new Exception($return['message']);
 		}
 
-		//	Get param
-		$username = $requestData['username'];
-		$accountname = $requestData['accountname'];
-		$password = md5($requestData['password']);
-		$role = $requestData['role'];
-
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$password."', ".$role.");";
+		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$passwordMD5."', ".$role.");";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 

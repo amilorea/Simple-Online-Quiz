@@ -23,19 +23,19 @@
 		$teacher = $_SESSION['user'];
 		if( $teacher == NULL )	//	just for test
 			$teacher = $requestData['teacher'];
-		$contestname = $requestData['contestname'];
+		$contestID = $requestData['contestID'];
 
-		// $rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
-		// $valueInQuery = "";
-		// foreach($requestData['content'] as $data){
-		// 	if( strlen( $valueInQuery ) != 0 )
-		// 		$valueInQuery = $valueInQuery.", ";
-		// 	$valueInQuery = $valueInQuery."( '".$contestID."', '".$data['question'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['A']."', '".$data['B']."', '".$data['C']."', '".$data['D'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['correct']."', '".$data['point']."')";
-		// }
+		$rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
+		$valueInQuery = "";
+		foreach($requestData['content'] as $data){
+			if( strlen( $valueInQuery ) != 0 )
+				$valueInQuery = $valueInQuery.", ";
+			$valueInQuery = $valueInQuery."( '".$contestID."', '".$data['question'];
+			$valueInQuery = $valueInQuery."', '".$data['A']."', '".$data['B']."', '".$data['C']."', '".$data['D'];
+			$valueInQuery = $valueInQuery."', '".$data['correct']."', '".$data['point']."')";
+		}
 
-		// $return['value'] = $valueInQuery;
+		$return['value'] = $valueInQuery;
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -43,12 +43,12 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "INSERT INTO `contest` ( contestname, teacher ) VALUES ('".$contestname."', '".$teacher."');";
+		$query = "INSERT INTO `question` ".$rowInQuery." VALUES ".$valueInQuery.";";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
 		if( $result ){
-			if( mysqli_affected_rows( $connector ) ){
+			if( mysqli_affected_rows( $connector ) > 0 ){
 				$return['message'] = 'success';
 				http_response_code(200);
 			}
