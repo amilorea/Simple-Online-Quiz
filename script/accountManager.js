@@ -125,16 +125,6 @@ function saveHandle(t, num){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function createDynamicInput(name, element, type = 'text', defaultValue = false){
-	var ele = document.createElement('input');
-	ele.setAttribute('class', 'newData full-input');
-	ele.setAttribute('id', name + 'Update');
-	ele.setAttribute('type', type);
-	ele.setAttribute('placeholder', "Để trống để giữ nguyên");
-	if(defaultValue === true)
-		ele.setAttribute('value', element.innerHTML);
-	return ele;
-}
 function editHandle(t, id){
 	var cancelButton = t.nextElementSibling;
 	var removeButton = cancelButton.nextElementSibling;

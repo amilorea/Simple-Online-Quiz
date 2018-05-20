@@ -25,9 +25,10 @@
 			<td class="nameCol">Tên kỳ thi</td>
 			<td class="countCol">Số câu</td>
 			<td class="pointCol">Điểm tối đa</td>
+			<td class="pointCol">Thao tác</td>
 		</tr>
 		<tr style="text-align: center">
-			<td colspan="4">
+			<td colspan="5">
 				<!--<button class="findButton short-button" type="button" onclick="searchExam()">Tìm kiếm</button>
 				<button class="cancelSearchButton short-button" type="button" onclick="searchExam('restore')">Hủy</button>-->
 				<input type="text" id="insert-name" class="medium-input"> - <button class="insertButton double-small-button" type="button" onclick="insertContestHandle()">Thêm</button>
@@ -38,6 +39,11 @@
 			<td class="nameCol left pseudo-link"></td>
 			<td class="countCol"></td>
 			<td class="pointCol"></td>
+			<td class="actionCol">
+				<button class="editButton small-button" type="button">Sửa</button>
+				<button class="cancelButton small-button hide" type="button">Hủy</button>
+				<button class="deleteButton small-button" type="button">Xóa</button>
+			</td>
 		</tr>
 	</table>
 	<div id="notification"></div>

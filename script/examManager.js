@@ -24,8 +24,10 @@ function searchExamOwned(){
 					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
 					newRow.classList.remove('hide');
 					newRow.classList.add('searchable');
-					newRow.setAttribute('id', 'exam' + data['id']);
-					console.log(newRow);
+					newRow.setAttribute('id', data['id']);
+					newRow.getElementsByClassName('editButton')[0].setAttribute('onclick', 'editExamHandle(this, "' + data['id'] + '")');
+					newRow.getElementsByClassName('cancelButton')[0].setAttribute('onclick', 'cancelExamHandle(this, "' + data['id'] + '")');
+					newRow.getElementsByClassName('deleteButton')[0].setAttribute('onclick', 'deleteExamHandle(this, "' + data['id'] + '")');
 					prototypeRow.after(newRow);
 				}
 				break;
@@ -302,4 +304,153 @@ function saveQuestion(t, id){
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(param);
 	}
+}
+function saveExamHandle(t, id){
+	var paramObject = {};
+	paramObject['id'] = id
+	paramObject['name'] = document.getElementById('examNameUpdate').value.trim();
+	logParam(paramObject);
+	var param = JSON.stringify(paramObject);
+	logParam(param);
+	
+	//Bắt đầu request
+	onload(t);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			unload(t, 'Sửa');
+			var cancelButton = t.nextElementSibling;
+			cancelButton.click();
+			switch(this.status){
+			case 200:
+				notification(returnObject['message'], 'success');
+				searchHandle('restore');
+				break;
+			case 400:
+				notification(returnObject['message'], 'error');
+				break;
+			case 401:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('login.html');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			}
+		}
+	};
+	request.open('POST', ADMIN_API + 'userEditHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
+}
+function editExamHandle(t, id){
+	var cancelButton = t.nextElementSibling;
+	var removeButton = cancelButton.nextElementSibling;
+	
+	//Kích hoạt nút hủy
+	cancelButton.removeAttribute('disabled');
+	cancelButton.classList.remove('hide');
+	
+	//Ẩn nút xóa
+	removeButton.setAttribute('disabled', '');
+	removeButton.classList.add('hide');
+	
+	//Tắt mọi nút chỉnh sửa trừ chính nó
+	var allEditButton = document.getElementsByClassName('editButton');
+	for(var i = 0; i < allEditButton.length; i++){
+		allEditButton[i].setAttribute('disabled', true);
+	}
+	t.removeAttribute('disabled');
+	
+	//Thay đổi nút sửa thành nút lưu
+	t.classList.add('saveButton');
+	t.classList.remove('editButton');
+	t.attributes['onclick'].value = 'saveExamHandle(this, "' + id + '")';
+	t.innerHTML = 'Lưu';
+	
+	var selectedRow = document.getElementById(id);
+	
+	var examname = selectedRow.getElementsByClassName('nameCol')[0];
+	examname.append(createDynamicInput('examName', examname));
+}
+function cancelExamHandle(t, num){
+	var removeButton = t.nextElementSibling;
+	var activeButton = t.previousElementSibling;
+	
+	//Vô hiệu mọi nút hủy
+	var allCancelButton = document.getElementsByClassName('cancelButton');
+	for(var i = 0; i < allCancelButton.length; i++){
+		allCancelButton[i].setAttribute('disabled', true);
+		allCancelButton[i].classList.add('hide');
+	}
+	
+	//Kích hoạt lại mọi nút sửa
+	var allEditButton = document.getElementsByClassName('editButton');
+	for(var i = 0; i < allEditButton.length; i++){
+		allEditButton[i].removeAttribute('disabled');
+	}
+	
+	//Thay đổi nút lưu thành nút sửa
+	activeButton.classList.remove('saveButton');
+	activeButton.classList.add('editButton');
+	activeButton.attributes['onclick'].value = 'editExamHandle(this, "' + num + '")';
+	activeButton.innerHTML = 'Sửa';
+	
+	//Hiện nút xóa
+	removeButton.removeAttribute('disabled');
+	removeButton.classList.remove('hide');
+	
+	//Hủy các input 5 và 6
+	var selectedRow = document.getElementsByClassName('dataRow')[num].getElementsByTagName('td');
+	for(var i = 0; i < selectedRow.length - 1; i++){
+		var selectedInput = selectedRow[i].getElementsByTagName('input');
+		while(selectedInput.length != 0){
+			selectedInput[0].remove();
+		}
+		var selectedDroplist = selectedRow[i].getElementsByTagName('select');
+		while(selectedDroplist.length != 0){
+			selectedDroplist[0].remove();
+		}
+	}
+}
+function deleteExamHandle(t, num){
+	var paramObject = {};
+	paramObject['id'] = num;
+	var param = JSON.stringify(paramObject);
+	logParam(param);
+	
+	//Bắt đầu request
+	onload(t);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			unload(t, 'Xóa');
+			switch(this.status){
+			case 200:
+				notification(returnObject['message'], 'success');
+				var target = document.getElementById(num);
+				target.remove();
+				break;
+			case 401:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('login.html');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
+				break;
+			}
+		}
+	};
+	request.open('POST', ADMIN_API + 'userDeleteHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
 }
