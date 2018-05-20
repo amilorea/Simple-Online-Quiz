@@ -52,7 +52,7 @@
 		}
 
 		addQuery('question', $requestData['question']);
-		addQuery('score', $requestData['score']);
+		addQuery('point', $requestData['point']);
 		addQuery('A', $requestData['A']);
 		addQuery('B', $requestData['B']);
 		addQuery('C', $requestData['C']);

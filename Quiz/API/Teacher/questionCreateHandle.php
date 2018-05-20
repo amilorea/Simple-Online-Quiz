@@ -23,6 +23,19 @@
 		$teacher = $_SESSION['user'];
 		if( $teacher == NULL )	//	just for test
 			$teacher = $requestData['teacher'];
+		$contestID = $requestData['contestID'];
+
+		$rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
+		$valueInQuery = "";
+		foreach($requestData['content'] as $data){
+			if( strlen( $valueInQuery ) != 0 )
+				$valueInQuery = $valueInQuery.", ";
+			$valueInQuery = $valueInQuery."( '".$contestID."', '".$data['question'];
+			$valueInQuery = $valueInQuery."', '".$data['A']."', '".$data['B']."', '".$data['C']."', '".$data['D'];
+			$valueInQuery = $valueInQuery."', '".$data['correct']."', '".$data['point']."')";
+		}
+
+		$return['value'] = $valueInQuery;
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -30,31 +43,17 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "SELECT contest.*, COUNT( question.questionID ) as count, SUM(question.point) as total FROM `contest` LEFT OUTER JOIN `question` ON question.contestID = contest.ID WHERE teacher = '".$teacher."' GROUP BY contest.ID";
+		$query = "INSERT INTO `question` ".$rowInQuery." VALUES ".$valueInQuery.";";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
 		if( $result ){
-			if( mysqli_num_rows($result) > 0 ){
-				$cnt= 0;
-				$contentArr= [];
-				while($dataRow = mysqli_fetch_array($result, MYSQLI_BOTH)){
-					$rowArr = [];
-					$rowArr['id']= $dataRow['ID'];
-					$rowArr['name']= $dataRow['contestname'];
-					// $rowArr['teacher']= $dataRow['accountname'];
-					$rowArr['totalpoint']= round($dataRow['total'], 2);
-					$rowArr['questioncount']= $dataRow['count'];
-					// $rowArr['id']= $dataRow['id'];
-					$contentArr[$cnt] = $rowArr;
-					$cnt += 1;
-				}
-				$return['content'] = $contentArr;
+			if( mysqli_affected_rows( $connector ) > 0 ){
 				$return['message'] = 'success';
 				http_response_code(200);
 			}
-			else{
-				$return['message'] = 'Bạn chưa tạo kì thi nào!';
+			else {
+				$return['message'] = 'Not found username!';
 				http_response_code(400);
 			}
 		}

@@ -43,6 +43,12 @@ function searchExamOwned(){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send();
 }
+function examManagePreparing(id){
+	onGoingFlag = false;
+	globalExamId = id;
+}
+var globalExamId;
+var globalCountingId;
 function editExam(id){
 	var paramObject = {};
 	paramObject['id'] = id;
@@ -61,8 +67,9 @@ function editExam(id){
 			case 200:
 				document.getElementById('introduction').innerHTML = '<div class="exam-name">' + returnObject['name'] + '</div>';
 				var content = returnObject['content'];
+				globalCountingId = content.length;
 				var prototypeQuestion = document.getElementById('prototype');
-				for(var cnt = content.length; cnt > 0; cnt--){
+				for(var cnt = globalCountingId; cnt > 0; cnt--){
 					var question = content[cnt - 1];
 					var newQuestion = prototypeQuestion.cloneNode(true);
 					newQuestion.getElementsByClassName('questionId')[0].innerHTML = 'Câu ' + cnt;
@@ -80,14 +87,16 @@ function editExam(id){
 						//targetAnswer.setAttribute('name', question['id']);
 						//targetAnswer.setAttribute('value', String.fromCharCode((i - 1) + 'A'.charCodeAt()));
 					}
-					document.getElementsByClassName('tiny-input')[0].selectedIndex = String.fromCharCode(question['answer'].charCodeAt() - 'A'.charCodeAt());
+					var selectedOption = question['correct'].charCodeAt() - 'A'.charCodeAt();
+					newQuestion.getElementsByClassName('correctAnswer')[0].selectedIndex = selectedOption;
+					newQuestion.getElementsByClassName('correctAnswer')[0].getElementsByTagName('option')[selectedOption].setAttribute('selected','');
 					newQuestion.setAttribute('id', question['id']);
 					newQuestion.classList.remove('hide');
 					newQuestion.getElementsByClassName('removeButton')[0].setAttribute('onclick', 'removeQuestion(this, ' + question['id'] + ')');
-					newQuestion.getElementsByClassName('removeButton')[0].setAttribute('onclick', 'saveQuestion(this, ' + question['id'] + ')');
-					prototypeQuestion.before(newQuestion);
+					newQuestion.getElementsByClassName('saveButton')[0].setAttribute('onclick', 'saveQuestion(this, ' + question['id'] + ')');
+					prototypeQuestion.after(newQuestion);
 				}
-				examPreparing();
+				examManagePreparing(id);
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');
@@ -107,6 +116,7 @@ function editExam(id){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
+var currentGlobalId = 1000000000;
 var globalId = 1000000000;
 var globalChange = {};
 function addQuestion(){
@@ -114,17 +124,51 @@ function addQuestion(){
 	var prototypeQuestion = document.getElementById('prototype');
 	var newQuestion = prototypeQuestion.cloneNode(true);
 	newQuestion.getElementsByClassName('questionId')[0].innerHTML = 'Câu hỏi mới';
-	newQuestion.getElementsByClassName('questionId')[0].setAttribute('id', globalId);
-	newQuestion.setAttribute('id', globalId);
+	newQuestion.getElementsByClassName('questionId')[0].setAttribute('id', currentGlobalId);
+	newQuestion.setAttribute('id', currentGlobalId);
 	newQuestion.classList.remove('hide');
-	newQuestion.getElementsByClassName('removeButton')[0].setAttribute('onclick', 'removeQuestion(this, ' + globalId + ')');
-	newQuestion.getElementsByClassName('removeButton')[0].setAttribute('onclick', 'saveQuestion(this, ' + globalId + ')');
+	newQuestion.getElementsByClassName('removeButton')[0].setAttribute('onclick', 'removeQuestion(this, ' + currentGlobalId + ')');
+	newQuestion.getElementsByClassName('saveButton')[0].setAttribute('onclick', 'saveQuestion(this, ' + currentGlobalId + ')');
 	prototypeQuestion.after(newQuestion);
-	globalId++;
+	currentGlobalId++;
 }
 function removeQuestion(t, id){
-	document.getElementById(id).remove();
-	globalChange[id] = 'remove';
+	var paramObject = {};
+	paramObject['id'] = id;
+	var param = JSON.stringify(paramObject);
+	logParam(param);
+	
+	//Bắt đầu request
+	onload(document.getElementById('notification'), 30);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			unload(document.getElementById('notification'));
+			switch(this.status){
+			case 200:
+				notification(returnObject['message'], 'success');
+				document.getElementById(id).remove();
+				globalChange[id] = 'remove';
+				break;
+			case 400:
+				notification(returnObject['message'], 'error');
+				break;
+			case 401:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('login.html');
+				break;
+			case 404:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			}
+		}
+	};
+	request.open('POST', TEACHER_API + 'questionDeleteHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
 }
 function insertContestHandle(){
 	var paramObject = {};
@@ -162,4 +206,100 @@ function insertContestHandle(){
 	request.open('POST', TEACHER_API + 'examCreateHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
+}
+function saveQuestion(t, id){
+	var paramObject = {};
+	if(id >= globalId){
+		logParam('New question');
+		logParam(id);
+		var target = document.getElementById(id);
+		paramObject['id'] = globalExamId;
+		paramObject['point'] = parseFloat(target.getElementsByClassName('scoreInput')[0].value.trim());
+		paramObject['question'] = target.getElementsByClassName('questionInput')[0].value.trim();
+		paramObject['A'] = target.getElementsByClassName('answerInput')[0].value.trim();
+		paramObject['B'] = target.getElementsByClassName('answerInput')[1].value.trim();
+		paramObject['C'] = target.getElementsByClassName('answerInput')[2].value.trim();
+		paramObject['D'] = target.getElementsByClassName('answerInput')[3].value.trim();
+		paramObject['correct'] = target.getElementsByClassName('correctAnswer')[0].value.trim();
+		var param = JSON.stringify(paramObject);
+		logParam(param);
+		
+		//Bắt đầu request
+		onload(document.getElementById('notification'), 30);
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (this.readyState == 4) {
+				logParam(this.responseText);
+				var returnObject = JSON.parse(this.responseText);
+				unload(document.getElementById('notification'));
+				switch(this.status){
+				case 200:
+					notification(returnObject['message'], 'success');
+					target.setAttribute('id', returnObject['id']);
+					target.getElementById('questionId').innerHTML = 'Câu ' + globalCountingId;
+					globalCountingId += 1;
+					document.getElementById('footer').insertBefore(target, null);
+					break;
+				case 400:
+					notification(returnObject['message'], 'error');
+					break;
+				case 401:
+					notification(returnObject['message'], 'error');
+					loadMiddlePage('login.html');
+					break;
+				case 404:
+					notification(returnObject['message'], 'error');
+					loadMiddlePage('main.html');
+					break;
+				}
+			}
+		};
+		request.open('POST', TEACHER_API + 'questionInsertHandle.php');
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(param);
+	} else {
+		logParam('Update question');
+		logParam(id);
+		var target = document.getElementById(id);
+		paramObject['id'] = parseInt(id);
+		paramObject['point'] = parseFloat(target.getElementsByClassName('scoreInput')[0].value.trim());
+		paramObject['question'] = target.getElementsByClassName('questionInput')[0].value.trim();
+		paramObject['A'] = target.getElementsByClassName('answerInput')[0].value.trim();
+		paramObject['B'] = target.getElementsByClassName('answerInput')[1].value.trim();
+		paramObject['C'] = target.getElementsByClassName('answerInput')[2].value.trim();
+		paramObject['D'] = target.getElementsByClassName('answerInput')[3].value.trim();
+		paramObject['correct'] = target.getElementsByClassName('correctAnswer')[0].value.trim();
+		var param = JSON.stringify(paramObject);
+		logParam(param);
+		
+		//Bắt đầu request
+		onload(document.getElementById('notification'), 30);
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (this.readyState == 4) {
+				logParam(this.responseText);
+				var returnObject = JSON.parse(this.responseText);
+				unload(document.getElementById('notification'));
+				switch(this.status){
+				case 200:
+					notification(returnObject['message'], 'success');
+					break;
+				case 400:
+					notification(returnObject['message'], 'error');
+					break;
+				case 401:
+					notification(returnObject['message'], 'error');
+					loadMiddlePage('login.html');
+					break;
+				case 404:
+					notification(returnObject['message'], 'error');
+					loadMiddlePage('main.html');
+					break;
+				}
+			}
+		};
+		request.open('POST', TEACHER_API + 'questionEditHandle.php');
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(param);
+	}
 }

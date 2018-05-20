@@ -16,7 +16,6 @@ function menuMaker(role){
 		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'profile.html\', function(){ return loadProfile() & getExamHistory() })">Cá nhân</div>';
 		str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-list.html\', function(){ return searchExam() })">Đề thi</div><hr>';
 		if(role >= _ROLE.TEACHER){
-			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam.html\')">Test</div><hr>';
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-list-owned.html\', function(){ return searchExamOwned() })">Quản lý đề thi</div><hr>';
 		}
 		if(role >= _ROLE.ADMIN){

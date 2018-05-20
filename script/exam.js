@@ -107,6 +107,12 @@ function searchExam(mode){
 		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
 		paramObject['totalpoint'] = document.getElementById('search-point').value.trim();
 		paramObject['questioncount'] = document.getElementById('search-count').value.trim();
+	} else {
+		paramObject['id'] = '';
+		paramObject['name'] = '';
+		paramObject['teacher'] = '';
+		paramObject['totalpoint'] = '';
+		paramObject['questioncount'] = '';
 	}
 	var param = JSON.stringify(paramObject);
 	logParam(param);
@@ -157,7 +163,6 @@ function searchExam(mode){
 	request.send(param);
 }
 var currentExam = {};
-var onGoingFlag = false;
 function examPreparing(){
 	currentExam = {};
 	var group = document.getElementsByClassName('question');
