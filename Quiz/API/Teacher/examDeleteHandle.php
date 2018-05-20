@@ -6,22 +6,22 @@
 	//	Make object return
 	$return = [];
 
-	$Admin = 3;
+	$teacherRole = 2;
 	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
 		$return['message']= 'Invalid user session!';
 		echo json_encode((object)$return);
 		http_response_code(400);
 	}
-	elseif(intval($_SESSION['role']) < $Admin){
-		$return['message']= "You aren't Admin!";
+	elseif(intval($_SESSION['role']) < $teacherRole ){
+		$return['message']= "You aren't Teacher or Admin!";
 		echo json_encode((object)$return);
 		http_response_code(400);
 	}
 	else
 	try {
 		//	Get param
-		$username = $requestData['username'];
-		$return['params'] = $requestData;
+		$contestID = $requestData['id'];
+		// $return['params'] = $requestData;
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -29,7 +29,7 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "DELETE FROM `user` WHERE username = '".$username."';";
+		$query = "DELETE FROM `contest` WHERE ID = '".$contestID."';";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
@@ -43,7 +43,7 @@
 				if( $result > 1 )
 					$return['message'] = 'Something when wrong because of '.$result." effect row!";
 				else
-					$return['message'] = 'Not found username!';
+					$return['message'] = 'Not found question!';
 				http_response_code(400);
 			}
 		}

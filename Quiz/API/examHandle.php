@@ -29,6 +29,7 @@
 		$return['query2'] = $query2;
 		$resultContest = mysqli_query($connector, $query1);
 		$result = mysqli_query($connector, $query2);
+		
 		if( $result && $resultContest ){
 			$contestData = mysqli_fetch_array($resultContest, MYSQLI_BOTH);
 			$return['name'] = $contestData['contestname'];

@@ -31,14 +31,21 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "SELECT * FROM `question` WHERE contestID = '".$contestID."';";
-		$return['query'] = $query;
-		$result = mysqli_query($connector, $query);
+		$query1 = "SELECT contestname FROM `contest` WHERE ID = '".$contestID."';";
+		$query2 = "SELECT * FROM `question` WHERE contestID = '".$contestID."';";
+		$return['query1'] = $query1;
+		$return['query2'] = $query2;
+		$resultContest = mysqli_query($connector, $query1);
+		$result = mysqli_query($connector, $query2);
 
-		if( $result ){
+		if( $result && $resultContest ){
+			$contestData = mysqli_fetch_array($resultContest, MYSQLI_BOTH);
+			$return['name'] = $contestData['contestname'];
+
 			$cnt= 0;
 			$contentArr= [];
 			while($dataRow = mysqli_fetch_array($result, MYSQLI_BOTH)){
+
 				// $return["".$cnt] = $dataRow;
 				$rowArr = [];
 				$rowArr['id'] = $dataRow['questionID'];
