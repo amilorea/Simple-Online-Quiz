@@ -73,6 +73,7 @@ input {
 	border-collapse: collapse;
 	word-wrap: break-word;
 	padding: 1px 4px 1px 4px;
+	border: 1px solid gray;
 }
 .tableResult tr:first-child {
 	background-color: #ff8;
@@ -155,6 +156,9 @@ button:disabled {
     color: #ee9500;
 	font-weight: bold;
 }
+.tiny-input {
+	width: 100px;
+}
 .short-input {
 	width: 50%;
 }
@@ -186,6 +190,9 @@ button:disabled {
 }
 .cancelButton {
 	background-color: #99f;
+}
+.cancelSearchButton {
+	background-color: #c6c;
 }
 .saveButton {
 	background-color: orange;

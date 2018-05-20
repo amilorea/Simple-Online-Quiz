@@ -35,7 +35,7 @@ function searchHandle(mode){
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
-			logParam(this.responseText);
+			//logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
 			logParam(returnObject);
 			unload(document.getElementById('loader'));
@@ -133,7 +133,6 @@ function createDynamicInput(name, element, type = 'text', defaultValue = false){
 	ele.setAttribute('placeholder', "Để trống để giữ nguyên");
 	if(defaultValue === true)
 		ele.setAttribute('value', element.innerHTML);
-	console.log(element.innerHTML);
 	return ele;
 }
 function editHandle(t, id){
@@ -228,15 +227,12 @@ function deleteHandle(t, num){
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			unload(t);
+			unload(t, 'Xóa');
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
 				var target = document.getElementById(num);
 				target.remove();
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
 				break;
 			case 401:
 				notification(returnObject['message'], 'error');
@@ -245,6 +241,9 @@ function deleteHandle(t, num){
 			case 404:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
 				break;
 			}
 		}
@@ -274,7 +273,8 @@ function insertHandle(){
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
-				var prototypeRow = document.getElementById('prototype');
+				searchHandle('restore');
+				/*var prototypeRow = document.getElementById('prototype');
 				var newRow = prototypeRow.cloneNode(true);
 				newRow.getElementsByClassName('usernameCol')[0].innerHTML = paramObject['username'];
 				newRow.getElementsByClassName('accountnameCol')[0].innerHTML = paramObject['accountname'];
@@ -286,7 +286,7 @@ function insertHandle(){
 				newRow.getElementsByClassName('deleteButton')[0].setAttribute('onclick', 'deleteHandle(this, ' + paramObject['username'] + ')');
 				newRow.classList.remove('hide');
 				newRow.classList.add('searchable');
-				prototypeRow.after(newRow);
+				prototypeRow.after(newRow);*/
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');

@@ -236,7 +236,8 @@ function submission(id){
 				}
 				var announcement = '<div class="announcement">Số điểm của bạn là ' + returnObject['totalpoint'] + '</div>';
 				notification(announcement, 'announcement');
-				document.getElementById('submit-button').remove();
+				document.getElementById('submit-button').innerHTML = 'Trở về';
+				document.getElementById('submit-button').setAttribute('onclick', 'loadMiddlePage(\'exam-list.html\', function(){ return searchExam() })');
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');
