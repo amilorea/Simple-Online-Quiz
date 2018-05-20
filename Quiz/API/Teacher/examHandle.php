@@ -23,19 +23,7 @@
 		$teacher = $_SESSION['user'];
 		if( $teacher == NULL )	//	just for test
 			$teacher = $requestData['teacher'];
-		$contestname = $requestData['contestname'];
-
-		// $rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
-		// $valueInQuery = "";
-		// foreach($requestData['content'] as $data){
-		// 	if( strlen( $valueInQuery ) != 0 )
-		// 		$valueInQuery = $valueInQuery.", ";
-		// 	$valueInQuery = $valueInQuery."( '".$contestID."', '".$data['question'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['A']."', '".$data['B']."', '".$data['C']."', '".$data['D'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['correct']."', '".$data['point']."')";
-		// }
-
-		// $return['value'] = $valueInQuery;
+		$contestID = $requestData['id'];
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
@@ -43,19 +31,30 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "INSERT INTO `contest` ( contestname, teacher ) VALUES ('".$contestname."', '".$teacher."');";
+		$query = "SELECT * FROM `question` WHERE contestID = '".$contestID."';";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
 		if( $result ){
-			if( mysqli_affected_rows( $connector ) ){
-				$return['message'] = 'success';
-				http_response_code(200);
+			$cnt= 0;
+			$contentArr= [];
+			while($dataRow = mysqli_fetch_array($result, MYSQLI_BOTH)){
+				// $return["".$cnt] = $dataRow;
+				$rowArr = [];
+				$rowArr['id'] = $dataRow['questionID'];
+				$rowArr['score'] = $dataRow['point'];
+				$rowArr['content'] = $dataRow['question'];
+				$rowArr['anwser1'] = $dataRow['A'];
+				$rowArr['anwser2'] = $dataRow['B'];
+				$rowArr['anwser3'] = $dataRow['C'];
+				$rowArr['anwser4'] = $dataRow['D'];
+				$rowArr['correct'] = $dataRow['correct'];
+				$contentArr[$cnt] = $rowArr;
+				$cnt += 1;
 			}
-			else {
-				$return['message'] = 'Not found username!';
-				http_response_code(400);
-			}
+			$return['content'] = $contentArr;
+			$return['message'] = 'success';
+			http_response_code(200);
 		}
 		else {
 			$return['message'] = 'Server error!!!';

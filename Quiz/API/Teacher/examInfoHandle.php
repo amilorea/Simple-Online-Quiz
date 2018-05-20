@@ -12,8 +12,8 @@
 	// 	echo json_encode((object)$return);
 	// 	http_response_code(400);
 	// }
-	// elseif(intval($_SESSION['role']) >= $teacherRole ){
-	// 	$return['message']= "You aren't Admin!";
+	// elseif(intval($_SESSION['role']) < $teacherRole ){
+	// 	$return['message']= "You aren't Teacher or Admin!";
 	// 	echo json_encode((object)$return);
 	// 	http_response_code(400);
 	// }
