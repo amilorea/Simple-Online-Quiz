@@ -71,8 +71,10 @@
 </style>
 <div id="main-wrapper" class="wrapper" onbeforeunload="examManagerCheck()">
 	<div id="introduction"></div>
-	<button class="insertButton large-button" type="button" onclick="addQuestion()">Thêm câu hỏi mới</button>
-	<div class="question" id="prototype">
+	<div style="text-align: center">
+		<button class="insertButton large-button" type="button" onclick="addQuestion()">Thêm câu hỏi mới</button>
+	</div>
+	<div class="question hide" id="prototype">
 		<div class="questionId"></div>
 		<div class="questionScore">
 			<input class="scoreInput medium-input" type="text"> điểm
@@ -83,22 +85,22 @@
 		<hr>
 		<div class="answerWrapper">
 			<div class="answer">
-				A: <input class="answerInput medium-input" type="text">
+				<div style="display: inline-block; width: 20px">A: </div><input class="answerInput medium-input" type="text">
 			</div>
 		</div>
 		<div class="answerWrapper">
 			<div class="answer">
-				B: <input class="answerInput medium-input" type="text">
+				<div style="display: inline-block; width: 20px">B: </div><input class="answerInput medium-input" type="text">
 			</div>
 		</div>
 		<div class="answerWrapper">
 			<div class="answer">
-				C: <input class="answerInput medium-input" type="text">
+				<div style="display: inline-block; width: 20px">C: </div><input class="answerInput medium-input" type="text">
 			</div>
 		</div>
 		<div class="answerWrapper">
 			<div class="answer">
-				D: <input class="answerInput medium-input" type="text">
+				<div style="display: inline-block; width: 20px">D: </div><input class="answerInput medium-input" type="text">
 			</div>
 		</div>
 		Đáp án đúng: <select class="tiny-input">
@@ -108,7 +110,7 @@
 			<option value="D">D</option>
 		</select>
 		<div style="text-align: center">
-			<button class="submitButton medium-button" type="button">Lưu câu hỏi</button>
+			<button class="saveButton medium-button" type="button">Lưu câu hỏi này</button>
 			<button class="removeButton medium-button" type="button">Xóa câu hỏi này</button>
 		</div>
 	</div>
