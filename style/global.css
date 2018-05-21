@@ -47,7 +47,7 @@ input {
 	color: #0a0;
 }
 .warning {
-	color: #00a;
+	color: #ea4000;
 }
 .hide {
 	display: none;
@@ -221,5 +221,5 @@ button:disabled {
 	border-radius: 5px;
 }
 .large-button {
-	width: 450px;
+	width: 310px;
 }

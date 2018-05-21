@@ -1,5 +1,75 @@
-function getExamHistory(){
+
+function searchExam(mode){
+	// Tìm kiếm các kỳ thi sẵn có
+	var paramObject = {};
+	if(mode !== 'restore') {
+		paramObject['id'] = document.getElementById('idSearch').value.trim();
+		paramObject['name'] = document.getElementById('examnameSearch').value.trim();
+		paramObject['teacher'] = document.getElementById('teacherSearch').value.trim();
+		//paramObject['totalpoint'] = parseFloat(document.getElementById('pointSearch').value.trim());
+		//paramObject['questioncount'] = parseInt(document.getElementById('questionCountSearch').value.trim());
+	} else {
+		paramObject['id'] = '';
+		paramObject['name'] = '';
+		paramObject['teacher'] = '';
+		//paramObject['totalpoint'] = '';
+		//paramObject['questioncount'] = '';
+	}
+	var param = JSON.stringify(paramObject);
+	logParam(param);
+	
 	//Bắt đầu request
+	onload(document.getElementById('notification'), 30);
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			logParam(this.responseText);
+			var returnObject = JSON.parse(this.responseText);
+			logParam(returnObject);
+			unload(document.getElementById('notification'));
+			switch(this.status){
+			case 200:
+				var content = returnObject['content'];
+				var prototypeRow = document.getElementById('prototype');
+				// Xóa kết quả hiện tại
+				var searchable = document.getElementsByClassName('searchable');
+				while(searchable.length != 0)
+					searchable[0].remove();
+				// Thêm các kết quả mới
+				for(var cnt = content.length; cnt > 0; cnt--){
+					var data = content[cnt - 1];
+					var newRow = prototypeRow.cloneNode(true);
+					
+					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
+					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
+					newRow.getElementsByClassName('countCol')[0].innerHTML = data['questioncount'];
+					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
+					
+					newRow.classList.remove('hide');
+					newRow.classList.add('searchable');
+					
+					newRow.setAttribute('id', 'exam' + data['id']);
+					prototypeRow.after(newRow);
+				}
+				break;
+			case 400:
+				notification(returnObject['message'], 'error');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
+				loadMiddlePage('main.html');
+				break;
+			}
+		}
+	};
+	request.open('POST', API + 'examSearchHandle.php');
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(param);
+}
+function getExamHistory(){
+	// Tải lịch sử thi của người dùng hiện tại
+	// Bắt đầu request
 	onload(document.getElementById('notification'), 30);
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
@@ -26,7 +96,7 @@ function getExamHistory(){
 			case 400:
 				notification(returnObject['message'], 'error');
 				break;
-			case 404:
+			default:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
 				break;
@@ -37,7 +107,18 @@ function getExamHistory(){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send();
 }
+var currentExam = {};
+function examPreparing(){
+	// Chuẩn bị bộ đáp án của người dùng để gửi đi chấm sau khi làm xong
+	currentExam = {};
+	var group = document.getElementsByClassName('question');
+	for(var i = 1; i < group.length; i++){
+		currentExam[group[i].getAttribute('id')] = '0';
+	}
+	onGoingFlag = true;
+}
 function getExam(id){
+	// Tải các câu hỏi từ bộ đề có id tương ứng
 	var paramObject = {};
 	paramObject['id'] = id;
 	var param = JSON.stringify(paramObject);
@@ -53,8 +134,11 @@ function getExam(id){
 			unload(document.getElementById('notification'));
 			switch(this.status){
 			case 200:
+				// Giới thiệu kỳ thi
 				document.getElementById('submit-button').setAttribute('onclick', 'submission(' + id + ')');
 				document.getElementById('introduction').innerHTML = '<div class="exam-name">' + returnObject['name'] + '</div><div class="exam-author">✻ ' + returnObject['teacher'] + ' ✻</div>';
+				
+				// Các câu hỏi
 				var content = returnObject['content'];
 				var prototypeQuestion = document.getElementById('prototype');
 				for(var cnt = content.length; cnt > 0; cnt--){
@@ -65,6 +149,7 @@ function getExam(id){
 					newQuestion.getElementsByClassName('questionScore')[0].innerHTML = '(' + question['score'] + ' điểm)';
 					newQuestion.setAttribute('data-score', question['score']);
 					newQuestion.getElementsByClassName('questionContent')[0].innerHTML = question['content'];
+					
 					var anwser = newQuestion.getElementsByClassName('answer');
 					var anwserButton = newQuestion.getElementsByClassName('answerChecker');
 					var str = 'chooseAnswer(this, ' + question['id'] + ')';
@@ -75,14 +160,12 @@ function getExam(id){
 						targetAnswer.setAttribute('name', question['id']);
 						targetAnswer.setAttribute('value', String.fromCharCode((i - 1) + 'A'.charCodeAt()));
 					}
+					
 					newQuestion.setAttribute('id', question['id']);
 					newQuestion.classList.remove('hide');
 					prototypeQuestion.after(newQuestion);
 				}
 				examPreparing();
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
 				break;
 			case 401:
 				notification(returnObject['message'], 'error');
@@ -92,6 +175,9 @@ function getExam(id){
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
 				break;
+			default:
+				notification(returnObject['message'], 'error');
+				break;
 			}
 		}
 	};
@@ -99,88 +185,17 @@ function getExam(id){
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
-function searchExam(mode){
-	var paramObject = {};
-	if(mode !== 'restore') {
-		paramObject['id'] = document.getElementById('search-id').value.trim();
-		paramObject['name'] = document.getElementById('search-name').value.trim();
-		paramObject['teacher'] = document.getElementById('search-teacher').value.trim();
-		paramObject['totalpoint'] = document.getElementById('search-point').value.trim();
-		paramObject['questioncount'] = document.getElementById('search-count').value.trim();
-	} else {
-		paramObject['id'] = '';
-		paramObject['name'] = '';
-		paramObject['teacher'] = '';
-		paramObject['totalpoint'] = '';
-		paramObject['questioncount'] = '';
-	}
-	var param = JSON.stringify(paramObject);
-	logParam(param);
-	
-	//Bắt đầu request
-	onload(document.getElementById('notification'), 30);
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-		if (this.readyState == 4) {
-			logParam(this.responseText);
-			var returnObject = JSON.parse(this.responseText);
-			logParam(returnObject);
-			unload(document.getElementById('notification'));
-			switch(this.status){
-			case 200:
-				var content = returnObject['content'];
-				var prototypeRow = document.getElementById('prototype');
-				var searchable = document.getElementsByClassName('searchable');
-				while(searchable.length != 0)
-					searchable[0].remove();
-				for(var cnt = content.length; cnt > 0; cnt--){
-					var data = content[cnt - 1];
-					var newRow = prototypeRow.cloneNode(true);
-					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
-					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
-					newRow.getElementsByClassName('countCol')[0].innerHTML = data['questioncount'];
-					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
-					newRow.classList.remove('hide');
-					newRow.classList.add('searchable');
-					newRow.setAttribute('id', 'exam' + data['id']);
-					console.log(newRow);
-					prototypeRow.after(newRow);
-				}
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
-				break;
-			case 404:
-				notification(returnObject['message'], 'error');
-				loadMiddlePage('main.html');
-				break;
-			}
-		}
-	};
-	request.open('POST', API + 'examSearchHandle.php');
-	request.setRequestHeader('Content-type', 'application/json');
-	request.send(param);
-}
-var currentExam = {};
-function examPreparing(){
-	currentExam = {};
-	var group = document.getElementsByClassName('question');
-	for(var i = 1; i < group.length; i++){
-		currentExam[group[i].getAttribute('id')] = '0';
-	}
-	onGoingFlag = true;
-}
 function chooseAnswer(thisElement, id){
+	// Ghi lại kết quả lựa chọn của người dùng
 	var group = document.getElementsByName(id);
 	for(var i = 0; i < group.length; i++){
 		group[i].parentElement.classList.remove('choosenAnswer');
 	}
 	thisElement.parentElement.classList.add('choosenAnswer');
 	currentExam[id] = thisElement.getAttribute('value');
-	console.log(currentExam);
 }
 function examCheck(){
+	// Đề phòng người dùng lỡ rời khỏi trang trong quá trình thi
 	if(onGoingFlag === false) return true;
 	if(confirm("Bạn có chắc muốn rời khỏi bài thi? (Kết quả sẽ không được lưu)") === false){
 		return false;
@@ -190,8 +205,9 @@ function examCheck(){
 function submission(id){
 	var paramObject = {};
 	paramObject['id'] = id;
-	
 	var paramContent = {};
+	
+	// Đề phòng người dùng nộp bài trong khi chưa làm hết
 	var keyList = Object.keys(currentExam);
 	var confirmFlag = false;
 	for(let question of keyList){
@@ -229,9 +245,11 @@ function submission(id){
 						var targetAnswerParent = targetAnswer.parentElement;
 						targetAnswer.setAttribute('disabled', '');
 						if(targetAnswerParent.classList.contains('choosenAnswer')){
+							// Nếu người dùng chọn sai
 							if(!flag) targetAnswerParent.classList.add('wrongAnswer');
 						}
 						if(targetAnswer.value === data['answer']){
+							// Hiển thị đáp án đúng
 							targetAnswerParent.classList.add('acceptedAnswer');
 						}
 						targetAnswerParent.classList.remove('answerWrapper');
@@ -244,9 +262,6 @@ function submission(id){
 				document.getElementById('submit-button').innerHTML = 'Trở về';
 				document.getElementById('submit-button').setAttribute('onclick', 'loadMiddlePage(\'exam-list.html\', function(){ return searchExam() })');
 				break;
-			case 400:
-				notification(returnObject['message'], 'error');
-				break;
 			case 401:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('login.html');
@@ -254,6 +269,9 @@ function submission(id){
 			case 404:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
 				break;
 			}
 		}

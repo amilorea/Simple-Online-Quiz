@@ -19,6 +19,7 @@
 </style>
 <div id="main-wrapper" class="wrapper">
 	<h1>Danh sách các kỳ thi của bạn</h1>
+	<div id="notification"></div>
 	<table class="tableExam" style="border-radius: 10px">
 		<tr id="metaRow">
 			<td class="idCol">ID kỳ thi</td>
@@ -31,7 +32,7 @@
 			<td colspan="5">
 				<!--<button class="findButton short-button" type="button" onclick="searchExam()">Tìm kiếm</button>
 				<button class="cancelSearchButton short-button" type="button" onclick="searchExam('restore')">Hủy</button>-->
-				<input type="text" id="insert-name" class="medium-input"> - <button class="insertButton double-small-button" type="button" onclick="insertContestHandle()">Thêm</button>
+				<input type="text" id="insert-name" class="medium-input"> - <button class="insertButton double-small-button" type="button" onclick="insertContestHandle(this)">Thêm</button>
 			</td>
 		</tr>
 		<tr id="prototype" class="hide">
@@ -46,5 +47,5 @@
 			</td>
 		</tr>
 	</table>
-	<div id="notification"></div>
+	<div id="loader"></div>
 </div>

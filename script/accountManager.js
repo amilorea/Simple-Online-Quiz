@@ -1,4 +1,5 @@
 function createDropdown(id){
+	// Hàm tạo drop-down để lựa chọn cấp bậc người dùng
 	var droplist = document.createElement('select');
 	droplist.setAttribute('class', 'full-input');
 	droplist.setAttribute('id', id);
@@ -52,10 +53,11 @@ function searchHandle(mode){
 					var newRow = prototypeRow.cloneNode(true);
 					newRow.getElementsByClassName('usernameCol')[0].innerHTML = data['username'];
 					newRow.getElementsByClassName('accountnameCol')[0].innerHTML = data['accountname'];
-					/*'<div onclick="loadMiddlePage(\'profile.html\', function(){ return loadProfile(' + data['username'] + ') })">' + data['accountname'] + '</div>';*/
 					newRow.getElementsByClassName('passwordCol')[0].innerHTML = '**********';
 					newRow.getElementsByClassName('roleCol')[0].innerHTML = _ROLE[data['role']];
 					newRow.setAttribute('id', data['username']);
+					
+					// Nút bấm
 					newRow.getElementsByClassName('editButton')[0].setAttribute('onclick', 'editHandle(this, "' + data['username'] + '")');
 					newRow.getElementsByClassName('cancelButton')[0].setAttribute('onclick', 'cancelHandle(this, "' + data['username'] + '")');
 					newRow.getElementsByClassName('deleteButton')[0].setAttribute('onclick', 'deleteHandle(this, "' + data['username'] + '")');
@@ -64,9 +66,6 @@ function searchHandle(mode){
 					prototypeRow.after(newRow);
 				}
 				break;
-			case 400:
-				notification(returnObject['message'], 'error');
-				break;
 			case 401:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('login.html');
@@ -74,6 +73,9 @@ function searchHandle(mode){
 			case 404:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
 				break;
 			}
 		}
@@ -105,10 +107,10 @@ function saveHandle(t, num){
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
+				welcomeMaker(paramObject['role'], paramObject['accountname']);
+				menuMaker(paramObject['role']);
+				// Tìm kiếm lại toàn bộ người dùng để tránh sự hỗn loạn với các thao tác song song
 				searchHandle('restore');
-				break;
-			case 400:
-				notification(returnObject['message'], 'error');
 				break;
 			case 401:
 				notification(returnObject['message'], 'error');
@@ -117,6 +119,9 @@ function saveHandle(t, num){
 			case 404:
 				notification(returnObject['message'], 'error');
 				loadMiddlePage('main.html');
+				break;
+			default:
+				notification(returnObject['message'], 'error');
 				break;
 			}
 		}
@@ -263,20 +268,8 @@ function insertHandle(){
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
+				// Tìm kiếm lại toàn bộ người dùng để tránh sự hỗn loạn với các thao tác song song
 				searchHandle('restore');
-				/*var prototypeRow = document.getElementById('prototype');
-				var newRow = prototypeRow.cloneNode(true);
-				newRow.getElementsByClassName('usernameCol')[0].innerHTML = paramObject['username'];
-				newRow.getElementsByClassName('accountnameCol')[0].innerHTML = paramObject['accountname'];
-				newRow.getElementsByClassName('passwordCol')[0].innerHTML = '**********';
-				newRow.getElementsByClassName('roleCol')[0].innerHTML = _ROLE[paramObject['role']];
-				newRow.setAttribute('id', paramObject['username']);
-				newRow.getElementsByClassName('editButton')[0].setAttribute('onclick', 'editHandle(this, ' + paramObject['username'] + ')');
-				newRow.getElementsByClassName('cancelButton')[0].setAttribute('onclick', 'cancelHandle(this, ' + paramObject['username'] + ')');
-				newRow.getElementsByClassName('deleteButton')[0].setAttribute('onclick', 'deleteHandle(this, ' + paramObject['username'] + ')');
-				newRow.classList.remove('hide');
-				newRow.classList.add('searchable');
-				prototypeRow.after(newRow);*/
 				break;
 			case 400:
 				notification(returnObject['message'], 'error');

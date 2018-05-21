@@ -1,4 +1,5 @@
 function welcomeMaker(role, name){
+	// In ra thông tin người dùng ở góc trên bên trái
 	var str = 'Xin chào <b>' + name + '</b><hr>';
 	document.getElementById('leftWelcome').innerHTML = str;
 	var roleClass = 'role-' + role;
@@ -6,6 +7,7 @@ function welcomeMaker(role, name){
 	document.getElementById('leftWelcome').classList.add(roleClass);
 }
 function menuMaker(role){
+	// Tạo ra thanh menu với các nút bấm tùy theo cấp bậc
 	var str = '<div class="mini menu-button" onclick="loadMiddlePage(\'main.html\')">Trang chủ</div><hr>';
 	var role = parseInt(role);
 	if(role === _ROLE.GUEST){
@@ -19,7 +21,6 @@ function menuMaker(role){
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-list-owned.html\', function(){ return searchExamOwned() })">Quản lý đề thi</div><hr>';
 		}
 		if(role >= _ROLE.ADMIN){
-			//str += '<div class="mini menu-button" onclick="loadMiddlePage(\'exam-admin.html\')">Quản trị đề thi</div>';
 			str += '<div class="mini menu-button" onclick="loadMiddlePage(\'user-admin.html\', function(){ searchHandle(\'restore\'); document.getElementById(\'drop-search-input\').append(createDropdown(\'role-box\')); return; })">Quản trị tài khoản</div>';
 		}
 	}

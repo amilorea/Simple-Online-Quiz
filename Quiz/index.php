@@ -84,24 +84,11 @@
 		<script src="../script/accountManager.js"></script>
 		<script src="../script/examManager.js"></script>
 		<script type="text/javascript">
-			var _ROLE = Object.freeze({
-				'GUEST' : 0,
-				0 : 'GUEST',
-				'USER' : 1,
-				1 : 'USER',
-				'TEACHER' : 2,
-				2 : 'TEACHER',
-				'ADMIN' : 3,
-				3 : 'ADMIN'
-			});
-			var _roleCount = 4;
-			var _role, _name;
-			var _middleWidth;
 			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['account'] ?>'){
+				// Cập nhật biến toàn cục dựa trên session
 				_role = role;
 				_name = name;
 			}
-			//updateSession(3, 'mock');
 			function loadTop(){
 				var target = document.getElementById('top-frame');
 				
@@ -160,7 +147,7 @@
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
-			function loadMiddlePage(source, callback = function(){}){
+			function loadMiddlePage(source, callbackFunction = function(){}){
 				if(examCheck() === false) return;
 				var target = document.getElementById('middle-frame');
 				
@@ -174,7 +161,7 @@
 							target.innerHTML = 'Lỗi không tải được dữ liệu';
 						else {
 							target.innerHTML = this.responseText;
-							callback();
+							callbackFunction();
 						}
 					}
 				};
