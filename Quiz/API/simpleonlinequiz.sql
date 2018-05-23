@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 20, 2018 lúc 08:51 AM
+-- Thời gian đã tạo: Th5 23, 2018 lúc 06:41 AM
 -- Phiên bản máy phục vụ: 10.1.31-MariaDB
 -- Phiên bản PHP: 7.2.3
 
@@ -40,11 +40,8 @@ CREATE TABLE `contest` (
 --
 
 INSERT INTO `contest` (`ID`, `contestname`, `teacher`, `created`) VALUES
-(1, 'Midterm', 'sihcpro', '2018-05-12 18:01:29'),
-(2, 'Final', 'equal1', '2018-05-12 18:01:29'),
-(3, 'test IQ', 'sihc1', '2018-05-19 16:20:11'),
-(4, 'test IQ', 'sihcpro', '2018-05-19 16:21:14'),
-(5, 'Sihc Pro', 'sihc', '2018-05-20 10:54:20');
+(8, 'Test Exam', 'sihc', '2018-05-23 10:36:08'),
+(9, 'Final Exam', 'sihc', '2018-05-23 10:59:48');
 
 -- --------------------------------------------------------
 
@@ -69,13 +66,16 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`questionID`, `contestID`, `question`, `A`, `B`, `C`, `D`, `correct`, `point`) VALUES
-(1, 1, 'What is that?', 'That is what?', 'What that is?', 'Is that what?', 'Is that, What?', 'A', 2.75),
-(2, 2, 'Does Bang free?', 'Yes, He is.', 'Yes, he does.', 'No, he doesn\'t', 'No, he didn\'t.', 'B', 2.25),
-(3, 2, 'Do you like English?', 'Yes, I\'m.', 'Yes, I\'ll.', 'No, I didn\'t.', 'No never!', 'D', 3.25),
-(4, 4, 'Do you smart?', 'No', 'YES', 'Just enough', 'Maybe not', 'C', 1.25),
-(5, 4, 'Do you like me?', 'Maybe', 'If you like me too', 'No never', 'I like your brother', 'D', 1.5),
-(7, 4, 'Do you smart?', 'No', 'YES', 'Just enough', 'Maybe not', 'C', 1.25),
-(8, 4, 'Do you smart too?', 'NO', 'YES', 'Just enough', 'Maybe not', 'C', 1.25);
+(1, 8, 'I haven\'t got ...', 'no brothers or sisters', 'brothers or sisters', 'any brothers or sisters', 'some brothers and sisters', 'C', 2),
+(2, 8, 'We haven’t got ... Champagne.', 'a lot', 'little', 'too', 'much', 'D', 2),
+(3, 8, 'I wanted an orange car, but they only had ...', 'a one red', 'one red', 'a red one', 'a red', 'C', 2),
+(4, 8, 'She ... Supper with us last Friday.', 'hadn\'t', 'no had', 'didn\'t have got', 'didn\'t have', 'D', 2),
+(5, 8, 'We have to go to the supermarket ... some bread and milk.', 'for getting', 'to get', 'to getting', 'for to get', 'B', 2),
+(6, 9, 'Iâ€™ve lost my passport. I canâ€™t find it ...', 'anywhere', 'nowhere', 'everywhere', 'somewhere', 'A', 2),
+(7, 9, 'Have you ...?', 'got any friends in Barcelona', 'not got no friends in Barcelona', 'in Barcelona any friends', 'friends in Barcelona got', 'A', 2),
+(8, 9, 'Every year,he goes to the coast for his holidays ...', 'in train', 'on train', 'by train', 'with train', 'C', 2),
+(9, 9, 'Michael ... Paris in the morning', 'to leaving', 'leaves for', 'is leaving for', 'leave to', 'C', 2),
+(10, 9, 'She has her German classes ...', 'in Tuesday mornings', 'at Tuesday mornings', 'by Tuesday mornings', 'on Tuesday mornings', 'D', 2);
 
 -- --------------------------------------------------------
 
@@ -116,14 +116,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `accountname`, `password`, `role`) VALUES
-('equal', 'Bang', '465289687a70db7aa7217cc240c29f0f', 3),
-('equal1', 'Bang sida', '465289687a70db7aa7217cc240c29f0f', 2),
-('equal2', 'Bang tester', '465289687a70db7aa7217cc240c29f0f', 1),
-('sihc', 'Chí Chí', '3d186804534370c3c817db0563f0e461', 3),
-('sihc3', 'Chisss', '3d186804534370c3c817db0563f0e461', 2),
-('sihc5', 'Sihc', '3d186804534370c3c817db0563f0e461', 1),
-('sihc7', 'Chischis', 'c4ca4238a0b923820dcc509a6f75849b', 1),
-('sihcpro', 'Chi dep trai', '3d186804534370c3c817db0563f0e461', 2);
+('admin', 'Quản trị viên 1', 'e10adc3949ba59abbe56e057f20f883e', 3),
+('aerolima', 'Quản trị viên 2', 'e10adc3949ba59abbe56e057f20f883e', 3),
+('equal', 'Sinh viên 1', 'e10adc3949ba59abbe56e057f20f883e', 1),
+('lauqerm', 'Nguyễn Thanh Bằng', 'e10adc3949ba59abbe56e057f20f883e', 1),
+('sihc', 'Giáo viên 1', 'e10adc3949ba59abbe56e057f20f883e', 2);
 
 -- --------------------------------------------------------
 
@@ -138,21 +135,6 @@ CREATE TABLE `userhistory` (
   `mark` float NOT NULL DEFAULT '0',
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `userhistory`
---
-
-INSERT INTO `userhistory` (`historyID`, `username`, `contestID`, `mark`, `time`) VALUES
-(1, 'equal', 1, 7, '2018-05-16 10:56:38'),
-(2, 'equal', 2, 8, '2018-05-16 10:56:38'),
-(3, 'sihc', 1, 7, '2018-05-16 10:57:07'),
-(4, 'sihc', 1, 9, '2018-05-16 10:57:18'),
-(5, 'sihc', 2, 8, '2018-05-16 10:57:29'),
-(6, 'sihc', 1, 2.75, '2018-05-17 18:09:34'),
-(7, 'sihc', 2, 0, '2018-05-17 18:10:08'),
-(8, 'sihc3', 1, 0, '2018-05-17 19:14:25'),
-(9, 'sihc', 4, 1.25, '2018-05-20 10:51:19');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -200,19 +182,19 @@ ALTER TABLE `userhistory`
 -- AUTO_INCREMENT cho bảng `contest`
 --
 ALTER TABLE `contest`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `question`
 --
 ALTER TABLE `question`
-  MODIFY `questionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `questionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `userhistory`
 --
 ALTER TABLE `userhistory`
-  MODIFY `historyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `historyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -234,8 +216,8 @@ ALTER TABLE `user`
 -- Các ràng buộc cho bảng `userhistory`
 --
 ALTER TABLE `userhistory`
-  ADD CONSTRAINT `contest` FOREIGN KEY (`ContestID`) REFERENCES `contest` (`ID`),
-  ADD CONSTRAINT `user` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
+  ADD CONSTRAINT `contest` FOREIGN KEY (`contestID`) REFERENCES `contest` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `user` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
