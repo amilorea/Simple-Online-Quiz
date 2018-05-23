@@ -6,18 +6,18 @@
 	//	Make object return
 	$return = [];
 
-	// $teacherRole = 2;
-	// if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
-	// 	$return['message']= 'Invalid user session!';
-	// 	echo json_encode((object)$return);
-	// 	http_response_code(400);
-	// }
-	// elseif(intval($_SESSION['role']) < $teacherRole ){
-	// 	$return['message']= "You aren't Teacher or Admin!";
-	// 	echo json_encode((object)$return);
-	// 	http_response_code(400);
-	// }
-	// else
+	$teacherRole = 2;
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(intval($_SESSION['role']) < $teacherRole ){
+		$return['message']= "You aren't Teacher or Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
 		//	Get param
 		$teacher = $_SESSION['user'];

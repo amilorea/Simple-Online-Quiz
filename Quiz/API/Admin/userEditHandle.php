@@ -26,12 +26,9 @@
 		$passwordMD5 = MD5($password);
 		$role = $requestData['role'];
 
-		if( strcmp($username, "")*strcmp($password, "") == 0 ){
-			$return['username']= $username;
-			$return['password']= $password;
-			$return['message'] = 'Require username or password!';
-			// echo json_encode((object)$return);
-			http_response_code(404);
+		if( strcmp($accountname, "") == 0 && strcmp($password, "") == 0 && !isset($role) ){
+			$return['params']= $requestData;
+			$return['message'] = 'Không thay đổi!';
 			throw new Exception($return['message']);
 		}
 
@@ -57,7 +54,8 @@
 		}
 
 		addQuery('accountname', $accountname);
-		addQuery('password', $passwordMD5);
+		if( strcmp($password, "") != 0 )
+			addQuery('password', $passwordMD5);
 		addQuery('role', $role);
 
 		$query= $query." WHERE username = '".$username."';";

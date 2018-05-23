@@ -15,11 +15,15 @@
 			$password = $requestData['password'];
 			$passwordMD5 = md5($password);
 
-			if( strcmp($username, "")*strcmp($password, "") == 0 ){
+			if( !isset($username) ){
+				$return['message'] = "Yêu cầu đăng nhập lại!";
+				throw new Exception($return['message']);
+			}
+
+			if( strcmp($accountname, "") == 0 && strcmp($password, "") == 0 ){
 				$return['username']= $username;
 				$return['password']= $password;
-				$return['message'] = 'Require username and password!';
-				http_response_code(404);
+				$return['message'] = 'Không thay đổi';
 				throw new Exception($return['message']);
 			}
 
@@ -45,7 +49,8 @@
 			}
 
 			addQuery('accountname', $accountname);
-			addQuery('password', $passwordMD5);
+			if( !strcmp( $password, "") == 0 )
+				addQuery('password', $passwordMD5);
 			// addQuery('role', $role);
 
 			$query= $query." WHERE username = '".$username."';";

@@ -46,7 +46,7 @@
 
 		//	Query
 		$stmt = $connector->prepare( "INSERT INTO `question` ( contestID, question, A, B, C, D, correct, point ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-		// ( :contestID, :question, :A, :B, :C, :D, :correct, :point )
+
 		$stmt->bind_param('issssssd', $id, $question, $A, $B, $C, $D, $correct, $point);
 
 		$id = $contestID;

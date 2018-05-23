@@ -6,18 +6,18 @@
 	//	Make object return
 	$return = [];
 
-	// $teacherRole = 2;
-	// if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
-	// 	$return['message']= 'Invalid user session!';
-	// 	echo json_encode((object)$return);
-	// 	http_response_code(400);
-	// }
-	// elseif(intval($_SESSION['role']) < $teacherRole ){
-	// 	$return['message']= "You aren't Teacher or Admin!";
-	// 	echo json_encode((object)$return);
-	// 	http_response_code(400);
-	// }
-	// else
+	$teacherRole = 2;
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(intval($_SESSION['role']) < $teacherRole ){
+		$return['message']= "You aren't Teacher or Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
 		//	Get Params
 		$questionID = $requestData['id'];
@@ -30,43 +30,39 @@
 			throw new Exception($return['message']);
 		}
 
-		//	Connect
-		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
-		mysqli_set_charset($connector, 'utf8');
-		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+		// Create connection
+		$connector = new mysqli('localhost', 'root', '', 'simpleonlinequiz');
+
+		// Check connection
+		if ($connector->connect_error) {
+		    die("Connection failed: " . $connector->connect_error);
+		}
 
 		//	Query
 		$mountChanged= 0;
-		$query = "UPDATE `question` SET ";
+		$query = " ";
 
-		function addQuery( $columnName, $value){
-			$query= "";
-			if( !is_null( $value ) && $value != "" ){
-				if( $GLOBALS['mountChanged'] > 0 )
-					$query = $GLOBALS['query'].', ';
-				else
-					$query = $GLOBALS['query'];
-				$GLOBALS['mountChanged']++;
-				$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
-			}
-		}
+		//	Query
+		$stmt = $connector->prepare( "UPDATE `question` SET question= ?, A= ?, B= ?, C= ?, D= ?, correct= ?, point= ? WHERE questionID = ?" );
+		$stmt->bind_param('ssssssdi', $question, $A, $B, $C, $D, $correct, $point, $id);
 
-		addQuery('question', $requestData['question']);
-		addQuery('point', $requestData['point']);
-		addQuery('A', $requestData['A']);
-		addQuery('B', $requestData['B']);
-		addQuery('C', $requestData['C']);
-		addQuery('D', $requestData['D']);
-		addQuery('correct', $requestData['correct']);
+		$id = $questionID;
+		$question = $requestData['question'];
+		$A = $requestData['A'];
+		$B = $requestData['B'];
+		$C = $requestData['C'];
+		$D = $requestData['D'];
+		$correct = $requestData['correct'];
+		if( isset( $requestData['point'] ) )
+			$point = floatval( $requestData['point'] );
+		else
+			$point = 0.0;
+		$result = $stmt->execute();
 
-		$query= $query." WHERE questionID = '".$questionID."';";
-
-		$return['query'] = $query;
-		$result = mysqli_query($connector, $query);
+		$return['error'] = $stmt->error;
 
 		if( $result ){
-			$result = mysqli_affected_rows( $connector );
-			if( $result == 1 ){
+			if( mysqli_affected_rows( $connector ) == 1 ){
 				$return['message'] = 'success';
 				http_response_code(200);
 			}
