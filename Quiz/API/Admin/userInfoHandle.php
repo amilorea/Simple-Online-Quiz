@@ -4,13 +4,25 @@
 	//	Make object return
 	$return = [];
 
+	$Admin = 3;
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(intval($_SESSION['role']) < $Admin){
+		$return['message']= "You aren't Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 		//	Query
-		$query = "SELECT contest.*, accountname, COUNT( question.questionID ) as count, ROUND( SUM(question.point), 1) as total FROM `contest` INNER JOIN `user` ON user.username = contest.teacher LEFT OUTER JOIN `question` ON question.contestID = contest.ID GROUP BY contest.ID";
+		$query = "SELECT * FROM `user`";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 		if( $result ){
@@ -19,12 +31,11 @@
 				$contentArr= [];
 				while($dataRow = mysqli_fetch_array($result, MYSQLI_BOTH)){
 					$rowArr = [];
-					$rowArr['id']= $dataRow['ID'];
-					$rowArr['name']= $dataRow['contestname'];
-					$rowArr['teacher']= $dataRow['accountname'];
-					$rowArr['totalpoint']= round( $dataRow['total'], 1 );
-					$rowArr['questioncount']= $dataRow['count'];
-					// $rowArr['id']= $dataRow['id'];
+					$rowArr['accountname'] = $dataRow['accountname'];
+					$rowArr['username'] = $dataRow['username'];
+					$rowArr['password'] = $dataRow['password'];
+					$rowArr['role'] = $dataRow['role'];
+
 					$contentArr[$cnt] = $rowArr;
 					$cnt += 1;
 				}
@@ -33,7 +44,7 @@
 				http_response_code(200);
 			}
 			else {
-				$return['message'] = 'Không có kì thi nào!';
+				$return['message'] = 'There are no User!';
 				http_response_code(400);
 			}
 			mysqli_free_result($result);

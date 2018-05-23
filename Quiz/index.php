@@ -45,13 +45,9 @@
 			}
 			.right-cell {
 				width: 150px;
-				position: relative;
-				z-index: 50;
 				vertical-align: top;
 			}
 			.middle-cell {
-				position: relative;
-				z-index: 100;
 			}
 			.top-frame {
 				height: 100%;
@@ -59,9 +55,12 @@
 			}
 			.left-frame {
 				width: 200px;
-				position: fixed;
+				/* position: fixed; */
+				position: relative;
+				z-index: 50;
 			}
 			.middle-frame {
+				position: relative;
 				min-height: 500px;
 				width: 100%;
 				box-shadow: 0px 0px 3px 3px gray;
@@ -70,10 +69,13 @@
 				background-image: url('../img/noise.png');
 				padding: 5px;
 				text-align: center;
+				z-index: 100;
 			}
 			.right-frame {
 				width: 150px;
-				position: fixed;
+				/* position: fixed; */
+				position: relative;
+				z-index: 50;
 			}
 		</style>
 		<script src="../script/left.js"></script>
@@ -81,25 +83,14 @@
 		<script src="../script/account.js"></script>
 		<script src="../script/profile.js"></script>
 		<script src="../script/exam.js"></script>
-		<script src="../script/admin.js"></script>
+		<script src="../script/accountManager.js"></script>
+		<script src="../script/examManager.js"></script>
 		<script type="text/javascript">
-			var _ROLE = Object.freeze({
-				'GUEST' : 0,
-				0 : 'GUEST',
-				'USER' : 1,
-				1 : 'USER',
-				'TEACHER' : 2,
-				2 : 'TEACHER',
-				'ADMIN' : 3,
-				3 : 'ADMIN'
-			});
-			var _role, _name;
-			var _middleWidth;
 			function updateSession(role = <?php echo $_SESSION['role'] ?>, name = '<?php echo $_SESSION['account'] ?>'){
+				// Cập nhật biến toàn cục dựa trên session
 				_role = role;
 				_name = name;
 			}
-			//updateSession(3, 'mock');
 			function loadTop(){
 				var target = document.getElementById('top-frame');
 				
@@ -158,7 +149,7 @@
 				request.setRequestHeader('Content-type', 'text/plain');
 				request.send();
 			}
-			function loadMiddlePage(source, callback = function(){}){
+			function loadMiddlePage(source, callbackFunction = function(){}){
 				if(examCheck() === false) return;
 				var target = document.getElementById('middle-frame');
 				
@@ -172,7 +163,7 @@
 							target.innerHTML = 'Lỗi không tải được dữ liệu';
 						else {
 							target.innerHTML = this.responseText;
-							callback();
+							callbackFunction();
 						}
 					}
 				};

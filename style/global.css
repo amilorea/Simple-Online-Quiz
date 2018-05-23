@@ -11,6 +11,15 @@ h1 {
 	font-size: 17px;
 	padding: 4px;
 }
+.announcement {
+	font-weight: bold;
+	color: #0095ef;
+	text-decoration: underline;
+	font-size: 20px;
+}
+textarea {
+	font-family: Arial;
+}
 input {
 	box-sizing: border-box;
 }
@@ -41,7 +50,7 @@ input {
 	color: #0a0;
 }
 .warning {
-	color: #00a;
+	color: #ea4000;
 }
 .hide {
 	display: none;
@@ -61,12 +70,13 @@ input {
 	table-layout: fixed;
 	border-collapse: collapse;
 	width: 100%;
-   background-color: #fafafa;
+	background-color: #fafafa;
 }
 .tableResult td {
 	border-collapse: collapse;
 	word-wrap: break-word;
 	padding: 1px 4px 1px 4px;
+	border: 1px solid gray;
 }
 .tableResult tr:first-child {
 	background-color: #ff8;
@@ -149,6 +159,9 @@ button:disabled {
     color: #ee9500;
 	font-weight: bold;
 }
+.tiny-input {
+	width: 100px;
+}
 .short-input {
 	width: 50%;
 }
@@ -181,6 +194,9 @@ button:disabled {
 .cancelButton {
 	background-color: #99f;
 }
+.cancelSearchButton {
+	background-color: #c6c;
+}
 .saveButton {
 	background-color: orange;
 }
@@ -208,5 +224,5 @@ button:disabled {
 	border-radius: 5px;
 }
 .large-button {
-	width: 450px;
+	width: 310px;
 }

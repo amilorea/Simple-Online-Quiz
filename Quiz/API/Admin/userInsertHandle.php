@@ -6,13 +6,29 @@
 	//	Make object return
 	$return = [];
 
-	//	Get param
-	$username = $requestData['username'];
-	$accountname = $requestData['accountname'];
-	$password = md5($requestData['password']);
-
+	$Admin = 3;
+	if(!isset($_SESSION['user'])||!isset($_SESSION['role'])){
+		$return['message']= 'Invalid user session!';
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	elseif(intval($_SESSION['role']) < $Admin){
+		$return['message']= "You aren't Admin!";
+		echo json_encode((object)$return);
+		http_response_code(400);
+	}
+	else
 	try {
-		if( !( strrpos($username," ") === false ) ){
+		//	Get param
+		$username = $requestData['username'];
+		$accountname = $requestData['accountname'];
+		$password = $requestData['password'];
+		$passwordMD5 = md5($password);
+		$role = $requestData['role'];
+		if( $role == NULL )
+			$role = 1;
+
+		if( !( strrpos($username," ") == false ) ){
 			$return['username'] = $username;
 			$return['message'] = 'Username can\'t have space';
 			throw new Exception($return['message']);
@@ -32,17 +48,12 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$password."', 1);";
+		$query = "INSERT INTO `user` (username, accountname, password, role) VALUES ('".$username."', '".$accountname."', '".$passwordMD5."', ".$role.");";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 
-		$return['result'] = $result;
-		$return['boolean'] = NULL != false;
 		if( $result != NULL ){
 			if( $result ){
-				$_SESSION['user'] = $username;
-				$_SESSION['account'] = $accountname;
-				$_SESSION['role'] = 1;
 				$return['message'] = 'success';
 				http_response_code(200);
 			}
@@ -52,7 +63,7 @@
 			}
 		}
 		else {
-			$return['message'] = 'Register error!!!';
+			$return['message'] = 'Server error!!!';
 			http_response_code(500);
 		}
 		echo json_encode((object)$return);

@@ -12,12 +12,13 @@
 		$password = md5($requestData['password']);
 
 
-		if( $username == "" || $password == "" ){
+		if( strcmp($username, "")*strcmp($password, "") == 0 ){
 			$return['username']= $username;
 			$return['password']= $password;
 			$result['message'] = 'Require username and password!';
-			echo json_encode((object)$return);
+			// echo json_encode((object)$return);
 			http_response_code(404);
+			throw new Exception($return['message']);
 		}
 
 		//	Connect
@@ -44,6 +45,8 @@
 			}
 			else {
 				$return['message'] = 'Invalid username or password!';
+				$return['username']= $username;
+				$return['password']= $password;
 				http_response_code(400);
 			}
 			mysqli_free_result($result);

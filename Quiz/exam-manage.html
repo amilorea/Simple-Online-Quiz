@@ -1,0 +1,119 @@
+<style type="text/css">
+	.wrapper {
+		text-align: left;
+		width: 100%;
+	}
+	.question {
+		box-shadow: 0px 0px 2px 2px black, 0px 0px 1px 1px gray;
+		background-color: #fbfbfb;
+		background-image: url('../img/noise.png');
+		margin: 15px 10px 15px 10px;
+		padding: 10px 20px 10px 20px;
+		border-radius: 10px;
+		transition: all 0.3s ease;
+		-webkit-transition: all 0.3s ease;
+		-o-transition: all 0.3s ease;
+		-moz-transition: all 0.3s ease;
+		-ms-transition: all 0.3s ease;
+	}
+	.question:hover {
+		background-color: #fff;
+	}
+	.questionId {
+		display: inline-block;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	.questionScore {
+		display: inline-block;
+		font-weight: bold;
+		color: orange;
+	}
+	.questionContent {
+		word-wrap: break-word;
+	}
+	.answer {
+		display: inline-block;
+	}
+	.answerWrapperUnhover {
+		margin: 4px 4px 4px 15px;
+		color: black;
+		border-radius: 5px;
+		padding: 2px;
+	}
+	.acceptedAnswer {
+		box-shadow: 0px 0px 2px 2px #0f0, 0px 0px 1px 1px #bfb;
+		background-image: url('../img/noise.png');
+		background-color: #262;
+		color: white;
+	}
+	.answerChecker {
+		width: 12px;
+		height: 12px;
+	}
+	.exam-name {
+		font-size: 24px;
+		font-weight: bold;
+		color: red;
+		text-align: center;
+	}
+	.exam-author {
+		font-size: 20px;
+		text-decoration: underline;
+		text-align: center;
+		color: orange;
+	}
+	.questionInput {
+		width: 100%;
+		height: 120px;
+		resize: none;
+	}
+</style>
+<div id="main-wrapper" class="wrapper" onbeforeunload="examManagerCheck()">
+	<div id="introduction"></div>
+	<div style="text-align: center">
+		<button class="insertButton large-button" type="button" onclick="addQuestion()">Thêm câu hỏi mới</button>
+	</div>
+	<div id="notification"></div>
+	<div class="question hide" id="prototype">
+		<div class="questionId"></div>
+		<div class="questionScore">
+			<input class="scoreInput medium-input" type="text"> điểm
+		</div> : 
+		<div class="questionContent">
+			<textarea class="questionInput"></textarea>
+		</div>
+		<hr>
+		<div class="answerWrapper">
+			<div class="answer">
+				<div style="display: inline-block; width: 20px">A: </div><input class="answerInput medium-input" type="text">
+			</div>
+		</div>
+		<div class="answerWrapper">
+			<div class="answer">
+				<div style="display: inline-block; width: 20px">B: </div><input class="answerInput medium-input" type="text">
+			</div>
+		</div>
+		<div class="answerWrapper">
+			<div class="answer">
+				<div style="display: inline-block; width: 20px">C: </div><input class="answerInput medium-input" type="text">
+			</div>
+		</div>
+		<div class="answerWrapper">
+			<div class="answer">
+				<div style="display: inline-block; width: 20px">D: </div><input class="answerInput medium-input" type="text">
+			</div>
+		</div>
+		Đáp án đúng: <select class="tiny-input correctAnswer">
+			<option value="A">A</option>
+			<option value="B">B</option>
+			<option value="C">C</option>
+			<option value="D">D</option>
+		</select>
+		<div style="text-align: center">
+			<button class="saveButton medium-button" type="button">Lưu câu hỏi này</button>
+			<button class="removeButton medium-button" type="button">Xóa câu hỏi này</button>
+		</div>
+	</div>
+	<div id="footer"></div>
+</div>

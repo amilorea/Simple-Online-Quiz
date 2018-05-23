@@ -5,22 +5,26 @@
 
 	//	Make object return
 	$return = [];
-
+	$username = $_SESSION['user'];
+	$role = $_SESSION['role'];
 
 	if( strcmp( $_SERVER['REQUEST_METHOD'], 'POST' ) == 0 ) {
 		try {
 			//	Get param
 			$accountname = $requestData['accountname'];
-			$username = $requestData['username'];
 			$password = $requestData['password'];
-			$role = $requestData['role'];
+			$passwordMD5 = md5($password);
 
-			if( $username == "" ){
+			if( !isset($username) ){
+				$return['message'] = "Yêu cầu đăng nhập lại!";
+				throw new Exception($return['message']);
+			}
+
+			if( strcmp($accountname, "") == 0 && strcmp($password, "") == 0 ){
 				$return['username']= $username;
-				$result['message'] = 'Require username!';
-				echo json_encode((object)$return);
-				http_response_code(404);
-				throw new Exception($return['mesage']);
+				$return['password']= $password;
+				$return['message'] = 'Không thay đổi';
+				throw new Exception($return['message']);
 			}
 
 			//	Connect
@@ -33,17 +37,21 @@
 			$query = "UPDATE `user` SET ";
 
 			function addQuery( $columnName, $value){
-				if( !is_null( $value ) ){
-					if( $mountChanged > 0 )
-						$query = $query.", ";
-					$mountChanged++;
-					$query = $query." ".$columnName." = '".$value."'";
+				$query= "";
+				if( !is_null( $value ) && $value != "" ){
+					if( $GLOBALS['mountChanged'] > 0 )
+						$query = $GLOBALS['query'].', ';
+					else
+						$query = $GLOBALS['query'];
+					$GLOBALS['mountChanged']++;
+					$GLOBALS['query'] = $query." ".$columnName." = '".$value."'";
 				}
 			}
 
 			addQuery('accountname', $accountname);
-			addQuery('password', $password);
-			addQuery('role', $role);
+			if( !strcmp( $password, "") == 0 )
+				addQuery('password', $passwordMD5);
+			// addQuery('role', $role);
 
 			$query= $query." WHERE username = '".$username."';";
 
@@ -52,6 +60,7 @@
 
 			if( $result ){
 				if( isset($_SESSION['user']) && strcmp( $_SESSION['user'], $username ) == 0 && $result ){
+					$_SESSION['account'] = $accountname;
 					$return['message'] = 'success';
 					http_response_code(200);
 				}
@@ -59,7 +68,6 @@
 					$return['message'] = 'Invalid username!';
 					http_response_code(400);
 				}
-				mysqli_free_result($result);
 			}
 			else {
 				$return['message'] = 'Update error!!!';
@@ -74,8 +82,7 @@
 	else {
 		try {
 			//	Get param
-			$username = $requestData['username'];
-			$username = $_SESSION['user'];
+			// $username = $requestData['username'];
 
 			if( $username == "" ){
 				$return['username']= $username;

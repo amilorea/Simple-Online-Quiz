@@ -1,6 +1,7 @@
 <style type="text/css">
 	.profile-table td {
 		padding: 2px 4px 2px 4px;
+		text-align: left;
 	}
 	.profile {
 		text-align: left;
@@ -39,6 +40,12 @@
 	.pointCol {
 		text-align: center;
 	}
+	.pseudo-link {
+		color: #00f;
+		text-decoration: underline;
+		font-weight: bold;
+		cursor: pointer;
+	}
 </style>
 <div id="userProfile">
 	<h1>Xin chào <span id="accountnameWelcome"></span></h1>
@@ -52,8 +59,7 @@
 				<td>
 					<div class="profile-value" id="username"></div>
 				</td>
-				<td>
-					<input type="text" class="medium-input round-input hide" id="usernameForm" disabled><br>
+				<td id="usernameEditor">
 				</td>
 			</tr>
 			<tr>
@@ -63,8 +69,7 @@
 				<td>
 					<div class="profile-value" id="accountname"></div>
 				</td>
-				<td>
-					<input type="text" class="medium-input round-input hide" id="accountnameForm" disabled><br>
+				<td id="accountnameEditor">
 				</td>
 			</tr>
 			<tr>
@@ -74,8 +79,7 @@
 				<td>
 					<div class="profile-value" id="password"></div>
 				</td>
-				<td>
-					<input type="text" class="medium-input round-input hide" id="passwordForm" disabled><br>
+				<td id="passwordEditor">
 				</td>
 			</tr>
 		</table>
@@ -83,6 +87,7 @@
 			<button type="button" class="medium-button editButton" onclick="profileEdit()" id="buttonEdit">Sửa</button>
 			<button type="button" class="medium-button cancelButton hide" onclick="profileCancel()" id="buttonCancel" disabled>Hủy</button>
 		</div>
+		<div id="notification"></div>
 		<div class="profile-field-center">Lịch sử thi</div>
 		<div id="exam">
 			<table class="tableExam">
@@ -92,18 +97,6 @@
 					<td class="teacherCol">Giáo viên</td>
 					<td class="pointCol">Điểm</td>
 				</tr>
-				<tr id="search-bar">
-					<td class="idCol"><input type="text" id="search-id" class="full-input"></td>
-					<td class="nameCol"><input type="text" id="name-id" class="full-input"></td>
-					<td class="teacherCol"><input type="text" id="teacher-id" class="full-input"></td>
-					<td class="pointCol"><input type="text" id="point-id" class="full-input"></td>
-				</tr>
-				<tr style="text-align: center">
-					<td colspan="4">
-						<button class="findButton short-button" type="button" onclick="searchExam('simple')">Tìm kiếm</button>
-						<button class="cancelButton short-button" type="button" onclick="getAllExam('simple')">Hủy</button>
-					</td>
-				</tr>
 				<tr id="prototype" class="hide">
 					<td class="idCol"></td>
 					<td class="nameCol left"></td>
@@ -111,7 +104,7 @@
 					<td class="pointCol"></td>
 				</tr>
 			</table>
-			<div id="notification"></div>
+			<div id="loader"></div>
 		</div>
 		<hr>
 	</div>

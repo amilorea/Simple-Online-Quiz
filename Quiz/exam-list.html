@@ -5,6 +5,12 @@
 	.nameCol {
 		width: 40%;
 	}
+	.pseudo-link {
+		color: #00f;
+		text-decoration: underline;
+		font-weight: bold;
+		cursor: pointer;
+	}
 	.teacherCol {
 		width: 20%;
 	}
@@ -12,9 +18,6 @@
 		width: 5%;
 	}
 	.pointCol {
-		width: 10%;
-	}
-	.totalPointCol {
 	}
 </style>
 <div id="main-wrapper" class="wrapper">
@@ -25,29 +28,26 @@
 			<td class="nameCol">Tên kỳ thi</td>
 			<td class="teacherCol">Giáo viên</td>
 			<td class="countCol">Số câu</td>
-			<td class="totalPointCol">Điểm tối đa</td>
-			<td class="pointCol">Điểm của bạn</td>
+			<td class="pointCol">Điểm tối đa</td>
 		</tr>
 		<tr id="search-bar">
-			<td class="idCol"><input type="text" id="search-id" class="full-input"></td>
-			<td class="nameCol"><input type="text" id="name-id" class="full-input"></td>
-			<td class="teacherCol"><input type="text" id="teacher-id" class="full-input"></td>
-			<td class="countCol"><input type="text" id="point-id" class="full-input"></td>
-			<td class="totalPointCol"><input type="text" id="teacher-id" class="full-input"></td>
-			<td class="pointCol"><input type="text" id="point-id" class="full-input"></td>
+			<td class="idCol"><input type="text" id="idSearch" class="full-input"></td>
+			<td class="nameCol"><input type="text" id="examnameSearch" class="full-input"></td>
+			<td class="teacherCol"><input type="text" id="teacherSearch" class="full-input"></td>
+			<td class="countCol"><!--<input type="text" id="questionCountSearch" class="full-input">--></td>
+			<td class="pointCol"><!--<input type="text" id="pointSearch" class="full-input">--></td>
 		</tr>
 		<tr style="text-align: center">
-			<td colspan="6">
-				<button class="findButton short-button" type="button" onclick="searchExam('complex')">Tìm kiếm</button>
-				<button class="cancelButton short-button" type="button" onclick="getAllExam('complex')" disabled>Hủy</button>
+			<td colspan="5">
+				<button class="findButton short-button" type="button" onclick="searchExam()">Tìm kiếm</button>
+				<button class="cancelSearchButton short-button" type="button" onclick="searchExam('restore')">Hủy</button>
 			</td>
 		</tr>
 		<tr id="prototype" class="hide">
 			<td class="idCol"></td>
-			<td class="nameCol left"></td>
+			<td class="nameCol left pseudo-link"></td>
 			<td class="teacherCol left"></td>
 			<td class="countCol"></td>
-			<td class="totalPointCol"></td>
 			<td class="pointCol"></td>
 		</tr>
 	</table>
