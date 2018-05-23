@@ -85,7 +85,7 @@ function getExamHistory(){
 					var data = content[cnt - 1];
 					var newRow = prototypeRow.cloneNode(true);
 					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam.html\', function(){ return getExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+					newRow.getElementsByClassName('nameCol')[0].innerHTML = data['name'];
 					newRow.getElementsByClassName('teacherCol')[0].innerHTML = data['teacher'];
 					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['yourpoint'];
 					newRow.setAttribute('id', 'exam' + data['id']);

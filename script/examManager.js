@@ -21,7 +21,7 @@ function searchExamOwned(){
 					var data = content[cnt - 1];
 					var newRow = prototypeRow.cloneNode(true);
 					newRow.getElementsByClassName('idCol')[0].innerHTML = data['id'];
-					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div onclick="loadMiddlePage(\'exam-manage.html\', function(){ return editExam(' + data['id'] + ') })">' + data['name'] + '</div>';
+					newRow.getElementsByClassName('nameCol')[0].innerHTML = '<div title="Sửa đề thi" onclick="loadMiddlePage(\'exam-manage.html\', function(){ return editExam(' + data['id'] + ') })">' + data['name'] + '</div>';
 					newRow.getElementsByClassName('countCol')[0].innerHTML = data['questioncount'];
 					newRow.getElementsByClassName('pointCol')[0].innerHTML = data['totalpoint'];
 					
@@ -69,7 +69,7 @@ function insertContestHandle(t){
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			unload(t);
+			unload(t, 'Thêm');
 			switch(this.status){
 			case 200:
 				notification(returnObject['message'], 'success');
@@ -223,7 +223,7 @@ function deleteExamHandle(t, id){
 			}
 		}
 	};
-	request.open('POST', ADMIN_API + 'userDeleteHandle.php');
+	request.open('POST', TEACHER_API + 'examDeleteHandle.php');
 	request.setRequestHeader('Content-type', 'application/json');
 	request.send(param);
 }
@@ -335,6 +335,7 @@ function saveQuestion(t, id){
 				switch(this.status){
 				case 200:
 					notification(returnObject['message'], 'success');
+					if(isNaN(paramObject['point'])) target.getElementsByClassName('scoreInput')[0].value = 0.0;
 					globalCountingId += 1;
 					target.getElementsByClassName('questionId')[0].innerHTML = 'Câu ' + globalCountingId;
 					target.setAttribute('id', returnObject['id']);
