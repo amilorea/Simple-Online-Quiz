@@ -102,6 +102,7 @@ function profileSave(){
 			unload(document.getElementById('buttonEdit'), 'Sửa');
 			switch(this.status){
 			case 200:
+				notification(returnObject['message'], 'success');
 				loadProfile();
 				break;
 			case 401:

@@ -45,13 +45,9 @@
 			}
 			.right-cell {
 				width: 150px;
-				position: relative;
-				z-index: 50;
 				vertical-align: top;
 			}
 			.middle-cell {
-				position: relative;
-				z-index: 100;
 			}
 			.top-frame {
 				height: 100%;
@@ -59,9 +55,12 @@
 			}
 			.left-frame {
 				width: 200px;
-				position: fixed;
+				/* position: fixed; */
+				position: relative;
+				z-index: 50;
 			}
 			.middle-frame {
+				position: relative;
 				min-height: 500px;
 				width: 100%;
 				box-shadow: 0px 0px 3px 3px gray;
@@ -70,10 +69,13 @@
 				background-image: url('../img/noise.png');
 				padding: 5px;
 				text-align: center;
+				z-index: 100;
 			}
 			.right-frame {
 				width: 150px;
-				position: fixed;
+				/* position: fixed; */
+				position: relative;
+				z-index: 50;
 			}
 		</style>
 		<script src="../script/left.js"></script>

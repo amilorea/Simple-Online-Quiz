@@ -2,11 +2,14 @@ function welcomeMaker(role, name){
 	// In ra thông tin người dùng ở góc trên bên trái
 	var str = 'Xin chào <b>' + name + '</b><hr>';
 	document.getElementById('leftWelcome').innerHTML = str;
-	var roleClass = 'role-' + role;
-	document.getElementById('leftWelcome').classList.value = '';
-	document.getElementById('leftWelcome').classList.add(roleClass);
+	if(!isNaN(role)){
+		var roleClass = 'role-' + role;
+		document.getElementById('leftWelcome').classList.value = '';
+		document.getElementById('leftWelcome').classList.add(roleClass);
+	}
 }
 function menuMaker(role){
+	if(isNaN(role)) return;
 	// Tạo ra thanh menu với các nút bấm tùy theo cấp bậc
 	var str = '<div class="mini menu-button" onclick="loadMiddlePage(\'main.html\')">Trang chủ</div><hr>';
 	var role = parseInt(role);

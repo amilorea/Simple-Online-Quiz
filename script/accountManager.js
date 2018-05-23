@@ -1,11 +1,11 @@
-function createDropdown(id){
+function createDropdown(id, noselect = false){
 	// Hàm tạo drop-down để lựa chọn cấp bậc người dùng
 	var droplist = document.createElement('select');
 	droplist.setAttribute('class', 'full-input');
 	droplist.setAttribute('id', id);
 	droplist.innerHTML += '<option value="">Trống</option>';
-	for(var cnt = 0; cnt < _roleCount; cnt++){
-		droplist.innerHTML += '<option value="' + _ROLE[_ROLE[cnt]] + '">' + _ROLE[cnt] + '</option>';
+	for(var cnt = 1; cnt < _roleCount; cnt++){
+		droplist.innerHTML += '<option value="' + _ROLE[_ROLE[cnt]] + '" ' + (cnt == 1 && noselect !== true ? 'selected' : '') + '>' + _ROLE[cnt] + '</option>';
 	}
 	return droplist;
 }
@@ -167,7 +167,7 @@ function editHandle(t, id){
 	password.append(createDynamicInput('password', password));
 	
 	var role = selectedRow.getElementsByClassName('roleCol')[0];
-	role.append(createDropdown('roleUpdate'));
+	role.append(createDropdown('roleUpdate', true));
 }
 function cancelHandle(t, num){
 	var removeButton = t.nextElementSibling;

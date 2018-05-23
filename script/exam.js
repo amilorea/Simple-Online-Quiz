@@ -70,13 +70,13 @@ function searchExam(mode){
 function getExamHistory(){
 	// Tải lịch sử thi của người dùng hiện tại
 	// Bắt đầu request
-	onload(document.getElementById('notification'), 30);
+	onload(document.getElementById('loader'), 30);
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (this.readyState == 4) {
 			logParam(this.responseText);
 			var returnObject = JSON.parse(this.responseText);
-			unload(document.getElementById('notification'));
+			unload(document.getElementById('loader'));
 			switch(this.status){
 			case 200:
 				var content = returnObject['content'];
