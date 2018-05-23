@@ -30,7 +30,7 @@
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 
 		//	Query
-		$query = "SELECT contest.*, COUNT( question.questionID ) as count, SUM(question.point) as total FROM `contest` LEFT OUTER JOIN `question` ON question.contestID = contest.ID WHERE teacher = '".$teacher."' GROUP BY contest.ID";
+		$query = "SELECT contest.*, COUNT( question.questionID ) as count, ROUND( SUM(question.point), 1) as total FROM `contest` LEFT OUTER JOIN `question` ON question.contestID = contest.ID WHERE teacher = '".$teacher."' GROUP BY contest.ID";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 

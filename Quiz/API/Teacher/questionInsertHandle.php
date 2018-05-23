@@ -25,28 +25,60 @@
 			$teacher = $requestData['teacher'];
 		$contestID = $requestData['id'];
 
-		$rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
 		if( empty($contestID) || empty($requestData['question']) || empty($requestData['A']) || empty($requestData['B']) || empty($requestData['C']) || empty($requestData['D']) || empty($requestData['correct']) ){
 			$return['params'] = $requestData;
 			$return['message'] = "Missing params!";
 			throw new Exception($return['message']);
 		}
-		$valueInQuery = "";
-		$valueInQuery = $valueInQuery."( '".$contestID."', '".$requestData['question'];
-		$valueInQuery = $valueInQuery."', '".$requestData['A']."', '".$requestData['B']."', '".$requestData['C']."', '".$requestData['D'];
-		$valueInQuery = $valueInQuery."', '".$requestData['correct']."', '".$requestData['point']."')";
-
-		$return['value'] = $valueInQuery;
 
 		//	Connect
-		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
-		mysqli_set_charset($connector, 'utf8');
-		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+		// $connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());
+		// mysqli_set_charset($connector, 'utf8');
+		// $db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
+
+		// Create connection
+		$connector = new mysqli('localhost', 'root', '', 'simpleonlinequiz');
+
+		// Check connection
+		if ($connector->connect_error) {
+		    die("Connection failed: " . $connector->connect_error);
+		}
 
 		//	Query
-		$query = "INSERT INTO `question` ".$rowInQuery." VALUES ".$valueInQuery.";";
-		$return['query'] = $query;
-		$result = mysqli_query($connector, $query);
+		$stmt = $connector->prepare( "INSERT INTO `question` ( contestID, question, A, B, C, D, correct, point ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+		// ( :contestID, :question, :A, :B, :C, :D, :correct, :point )
+		$stmt->bind_param('issssssd', $id, $question, $A, $B, $C, $D, $correct, $point);
+
+		$id = $contestID;
+		$question = $requestData['question'];
+		$A = $requestData['A'];
+		$B = $requestData['B'];
+		$C = $requestData['C'];
+		$D = $requestData['D'];
+		$correct = $requestData['correct'];
+		if( isset( $requestData['point'] ) )
+			$point = floatval( $requestData['point'] );
+		else
+			$point = 0.0;
+		$result = $stmt->execute();
+
+		$return['error'] = $stmt->error;
+ 
+
+
+
+		// $valueInQuery = $valueInQuery."( '".$contestID."', '".$requestData['question'];
+		// $valueInQuery = $valueInQuery."', '".$requestData['A']."', '".$requestData['B']."', '".$requestData['C']."', '".$requestData['D'];
+		// $valueInQuery = $valueInQuery."', '".$requestData['correct']."', '".$requestData['point']."')";
+
+		// $return['value'] = $valueInQuery;
+
+
+
+
+		// $query = "".$rowInQuery." VALUES ".$valueInQuery.";";
+		// $return['query'] = $query;
+		// $result = mysqli_query($connector, $query);
 
 		if( $result ){
 			if( mysqli_affected_rows( $connector ) > 0 ){
@@ -63,6 +95,8 @@
 			$return['message'] = 'Server error!!!';
 			http_response_code(500);
 		}
+		$stmt->close();
+		$connector->close();
 		echo json_encode((object)$return);
 	}
 	catch ( Exception $error ) {

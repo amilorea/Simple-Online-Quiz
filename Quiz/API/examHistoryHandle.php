@@ -16,7 +16,7 @@
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 		//	Query
-		$query = "SELECT userhistory.*, contest.contestname, user.accountname FROM `userhistory` INNER JOIN `contest` ON contest.ID = contestID INNER JOIN `user` ON contest.teacher = user.username WHERE userhistory.username = '".$username."';";
+		$query = "SELECT userhistory.*, ROUND( userhistory.mark, 1) AS mark2, contest.contestname, user.accountname FROM `userhistory` INNER JOIN `contest` ON contest.ID = contestID INNER JOIN `user` ON contest.teacher = user.username WHERE userhistory.username = '".$username."';";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 		if( $result ){
@@ -29,7 +29,7 @@
 					$rowArr['id']= $dataRow['historyID'];
 					$rowArr['name']= $dataRow['contestname'];
 					$rowArr['teacher']= $dataRow['accountname'];
-					$rowArr['yourpoint']= $dataRow['mark'];
+					$rowArr['yourpoint']= $dataRow['mark2'];
 					// $rowArr['id']= $dataRow['id'];
 					$contentArr[$cnt] = $rowArr;
 					$cnt += 1;

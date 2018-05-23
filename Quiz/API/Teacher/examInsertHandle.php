@@ -25,17 +25,11 @@
 			$teacher = $requestData['teacher'];
 		$contestname = $requestData['contestname'];
 
-		// $rowInQuery = "( contestID, question, A, B, C, D, correct, point )";
-		// $valueInQuery = "";
-		// foreach($requestData['content'] as $data){
-		// 	if( strlen( $valueInQuery ) != 0 )
-		// 		$valueInQuery = $valueInQuery.", ";
-		// 	$valueInQuery = $valueInQuery."( '".$contestID."', '".$data['question'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['A']."', '".$data['B']."', '".$data['C']."', '".$data['D'];
-		// 	$valueInQuery = $valueInQuery."', '".$data['correct']."', '".$data['point']."')";
-		// }
-
-		// $return['value'] = $valueInQuery;
+		if( strlen( trim( $contestname, ' ' ) ) == 0 ){
+			$return['message'] = 'Tên kì thi không được trống';
+			http_response_code(400);
+			throw new Exception($return['message']);
+		}
 
 		//	Connect
 		$connector = mysqli_connect('localhost', 'root', '') or die('Could not connect: '.mysql_error());

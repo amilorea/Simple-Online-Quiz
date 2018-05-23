@@ -17,7 +17,7 @@
 		mysqli_set_charset($connector, 'utf8');
 		$db_selected = mysqli_select_db($connector, 'simpleonlinequiz');
 		//	Query
-		$query = "SELECT ID, contestname, teacher, created, COUNT( question.questionID ) as count, SUM(question.point) as total FROM `contest` LEFT OUTER JOIN `question` ON question.`contestID` = contest.ID WHERE contestname LIKE '%".$searchName."%' AND contest.ID LIKE '%".$searchID."%' AND contest.teacher LIKE '%".$searchTeacher."%'  GROUP BY contest.ID";
+		$query = "SELECT ID, contestname, teacher, created, COUNT( question.questionID ) as count, ROUND( SUM(question.point), 1) as total FROM `contest` LEFT OUTER JOIN `question` ON question.`contestID` = contest.ID WHERE contestname LIKE '%".$searchName."%' AND contest.ID LIKE '%".$searchID."%' AND contest.teacher LIKE '%".$searchTeacher."%'  GROUP BY contest.ID";
 		$return['query'] = $query;
 		$result = mysqli_query($connector, $query);
 		if( $result ){
